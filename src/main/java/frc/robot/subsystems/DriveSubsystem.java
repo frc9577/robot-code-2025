@@ -4,8 +4,11 @@
 
 package frc.robot.subsystems;
 
+import java.util.Optional;
+
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -17,15 +20,25 @@ import frc.robot.Constants.*;
 import frc.robot.commands.ArcadeDriveCommand;
 
 public class DriveSubsystem extends SubsystemBase {
-  private final TalonFX m_leftMotor  = new TalonFX(DrivetrainConstants.kLeftMotorCANID);
   private final TalonFX m_rightMotor = new TalonFX(DrivetrainConstants.kRightMotorCANID);
+
+  @SuppressWarnings("unused")
+  private Optional<TalonFX> m_wrappedOptionalRightMotor;
+  private TalonFX m_optionalRightMotor;
+
+  private final TalonFX m_leftMotor  = new TalonFX(DrivetrainConstants.kLeftMotorCANID);
+
+  @SuppressWarnings("unused")
+  private Optional<TalonFX> m_wrappedOptionalLeftMotor;
+  private TalonFX m_optionalLeftMotor; 
+
   private DifferentialDrive m_Drivetrain;
 
   private double m_leftSpeed  = 0.0;
   private double m_rightSpeed = 0.0;
 
   /** Creates a new DriveSubsystem. */
-  public DriveSubsystem() { 
+  public DriveSubsystem() {
     // Right Motor Setup
     final MotorOutputConfigs m_rightMotorOutputConfigs = new MotorOutputConfigs();
     m_rightMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive; // why is it a enum :sob:
@@ -34,12 +47,56 @@ public class DriveSubsystem extends SubsystemBase {
     final TalonFXConfigurator m_rightMotorConfigurator = m_rightMotor.getConfigurator();
     m_rightMotorConfigurator.apply(m_rightMotorOutputConfigs);
 
+    // Optional Right Motor
+    try {
+      m_optionalRightMotor = new TalonFX(DrivetrainConstants.kOptionalRightMotorCANID);
+      m_wrappedOptionalRightMotor = Optional.of(m_optionalRightMotor);
+
+      final MotorOutputConfigs m_rightOptionalMotorOutputConfigs = new MotorOutputConfigs();
+      m_rightMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;
+      m_rightMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
+  
+      final TalonFXConfigurator m_rightOptionalMotorConfigurator = m_rightMotor.getConfigurator();
+      m_rightOptionalMotorConfigurator.apply(m_rightOptionalMotorOutputConfigs);
+
+      m_optionalRightMotor.setControl(
+        new Follower(m_rightMotor.getDeviceID(), false)
+      );
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+      m_wrappedOptionalRightMotor = Optional.empty();
+    }
+
     // Left Motor Setup
     final MotorOutputConfigs m_leftMotorOutputConfigs = new MotorOutputConfigs();
     m_leftMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
 
     final TalonFXConfigurator m_leftMotorConfigurator = m_leftMotor.getConfigurator();
     m_leftMotorConfigurator.apply(m_leftMotorOutputConfigs);
+
+    // Optional Left Motor
+    try {
+      m_optionalLeftMotor = new TalonFX(DrivetrainConstants.kOptionalLeftMotorCANID);
+      m_wrappedOptionalLeftMotor = Optional.of(m_optionalLeftMotor);
+
+      final MotorOutputConfigs m_leftOptionalMotorOutputConfigs = new MotorOutputConfigs();
+      m_leftMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;
+      m_leftMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
+  
+      final TalonFXConfigurator m_rightOptionalMotorConfigurator = m_rightMotor.getConfigurator();
+      m_rightOptionalMotorConfigurator.apply(m_leftOptionalMotorOutputConfigs);
+
+      m_optionalLeftMotor.setControl(
+        new Follower(m_rightMotor.getDeviceID(), false)
+      );
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+      m_wrappedOptionalLeftMotor = Optional.empty();
+    }
 
     // Setting up the drive train
     m_Drivetrain = new DifferentialDrive(m_leftMotor::set, m_rightMotor::set);
