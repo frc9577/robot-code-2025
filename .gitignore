@@ -1,9 +1,3 @@
-## Additional .gitingore file for the project defined by FRC 9577
-.gradle-home/
-
-## This is the location of our common repo.
-src/main/java/frc/recoil/
-
 # This gitignore has been specially created by the WPILib team.
 # If you remove items from this file, intellisense might break.
 
@@ -175,6 +169,8 @@ out/
 .fleet
 
 # Simulation GUI and other tools window save file
+networktables.json
+simgui.json
 *-window.json
 
 # Simulation data log directory
@@ -182,3 +178,10 @@ logs/
 
 # Folder that has CTRE Phoenix Sim device config storage
 ctre_sim/
+
+# clangd
+/.cache
+compile_commands.json
+
+# Eclipse generated file for annotation processors
+.factorypath
