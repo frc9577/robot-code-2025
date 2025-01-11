@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.Optional;
-
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
@@ -21,15 +19,9 @@ import frc.robot.commands.ArcadeDriveCommand;
 
 public class DriveSubsystem extends SubsystemBase {
   private final TalonFX m_rightMotor = new TalonFX(DrivetrainConstants.kRightMotorCANID);
-
-  @SuppressWarnings("unused")
-  private Optional<TalonFX> m_wrappedOptionalRightMotor;
   private TalonFX m_optionalRightMotor;
 
   private final TalonFX m_leftMotor  = new TalonFX(DrivetrainConstants.kLeftMotorCANID);
-
-  @SuppressWarnings("unused")
-  private Optional<TalonFX> m_wrappedOptionalLeftMotor;
   private TalonFX m_optionalLeftMotor; 
 
   private DifferentialDrive m_Drivetrain;
@@ -50,15 +42,17 @@ public class DriveSubsystem extends SubsystemBase {
     // Optional Right Motor
     try {
       m_optionalRightMotor = new TalonFX(DrivetrainConstants.kOptionalRightMotorCANID);
-      m_wrappedOptionalRightMotor = Optional.of(m_optionalRightMotor);
 
+      // Setting up Config
       final MotorOutputConfigs m_rightOptionalMotorOutputConfigs = new MotorOutputConfigs();
       m_rightMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;
       m_rightMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
   
+      // Saving Config
       final TalonFXConfigurator m_rightOptionalMotorConfigurator = m_rightMotor.getConfigurator();
       m_rightOptionalMotorConfigurator.apply(m_rightOptionalMotorOutputConfigs);
 
+      // Setting as a follwer
       m_optionalRightMotor.setControl(
         new Follower(m_rightMotor.getDeviceID(), false)
       );
@@ -66,7 +60,6 @@ public class DriveSubsystem extends SubsystemBase {
     catch (Exception e)
     {
       e.printStackTrace();
-      m_wrappedOptionalRightMotor = Optional.empty();
     }
 
     // Left Motor Setup
@@ -79,15 +72,17 @@ public class DriveSubsystem extends SubsystemBase {
     // Optional Left Motor
     try {
       m_optionalLeftMotor = new TalonFX(DrivetrainConstants.kOptionalLeftMotorCANID);
-      m_wrappedOptionalLeftMotor = Optional.of(m_optionalLeftMotor);
 
+      // Setting up config
       final MotorOutputConfigs m_leftOptionalMotorOutputConfigs = new MotorOutputConfigs();
       m_leftMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;
       m_leftMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
   
+      // Saving config
       final TalonFXConfigurator m_rightOptionalMotorConfigurator = m_rightMotor.getConfigurator();
       m_rightOptionalMotorConfigurator.apply(m_leftOptionalMotorOutputConfigs);
 
+      // Setting as follower
       m_optionalLeftMotor.setControl(
         new Follower(m_rightMotor.getDeviceID(), false)
       );
@@ -95,7 +90,6 @@ public class DriveSubsystem extends SubsystemBase {
     catch (Exception e)
     {
       e.printStackTrace();
-      m_wrappedOptionalLeftMotor = Optional.empty();
     }
 
     // Setting up the drive train
