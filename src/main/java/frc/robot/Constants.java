@@ -20,5 +20,8 @@ public final class Constants {
   public static class DrivetrainConstants {
     public static final int kLeftMotorCANID = 10;
     public static final int kRightMotorCANID = 20;
+
+    public static final double kTurnDivider = 2.0;
+    public static final double kSpeedDivider = 2.0;
   }
 }
