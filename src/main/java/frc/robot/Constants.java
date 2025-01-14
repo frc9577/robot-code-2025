@@ -27,4 +27,8 @@ public final class Constants {
     public static final double kTurnDivider = 2.0;
     public static final double kSpeedDivider = 2.0;
   }
+
+  public static class AutoConstants {
+    public static final double kPassLineSpeed = 0.40;
+  }
 }

@@ -5,8 +5,12 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AutonomousDriveForward;
+import frc.robot.commands.TimedCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -18,6 +22,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  // Create SmartDashboard chooser for autonomous routines
+  private final SendableChooser<Command> m_autoChooser = new SendableChooser<>();
+
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
 
@@ -26,8 +33,24 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    // Set up SmartDashboard/Shuffleboard widgets for driver/operator use.
+    configureDriverStationControls();
+
     // Configure the trigger bindings
     configureBindings();
+  }
+
+  //
+  // Configure all options that we want to display on the Shuffleboard dashboard.
+  //
+  private void configureDriverStationControls()
+  {
+    // Drop-down chooser for auto program.
+    AutonomousDriveForward autoDriveForward = new AutonomousDriveForward(m_driveSubsystem);
+    m_autoChooser.setDefaultOption("Drive Forward 2 Seconds", 
+      new TimedCommand(autoDriveForward, 2000));
+
+    SmartDashboard.putData(m_autoChooser);
   }
 
   /**
@@ -49,7 +72,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return null;
+    return m_autoChooser.getSelected();
   }
 
   public void setDriveType() {

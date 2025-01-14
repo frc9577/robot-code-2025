@@ -45,11 +45,11 @@ public class DriveSubsystem extends SubsystemBase {
 
       // Setting up Config
       final MotorOutputConfigs m_rightOptionalMotorOutputConfigs = new MotorOutputConfigs();
-      m_rightMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;
-      m_rightMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
+      m_rightOptionalMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;
+      m_rightOptionalMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
   
       // Saving Config
-      final TalonFXConfigurator m_rightOptionalMotorConfigurator = m_rightMotor.getConfigurator();
+      final TalonFXConfigurator m_rightOptionalMotorConfigurator = m_optionalRightMotor.getConfigurator();
       m_rightOptionalMotorConfigurator.apply(m_rightOptionalMotorOutputConfigs);
 
       // Setting as a follwer
@@ -75,16 +75,16 @@ public class DriveSubsystem extends SubsystemBase {
 
       // Setting up config
       final MotorOutputConfigs m_leftOptionalMotorOutputConfigs = new MotorOutputConfigs();
-      m_leftMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;
-      m_leftMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
+      m_leftOptionalMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;
+      m_leftOptionalMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
   
       // Saving config
-      final TalonFXConfigurator m_rightOptionalMotorConfigurator = m_rightMotor.getConfigurator();
-      m_rightOptionalMotorConfigurator.apply(m_leftOptionalMotorOutputConfigs);
+      final TalonFXConfigurator m_leftOptionalMotorConfigurator = m_optionalLeftMotor.getConfigurator();
+      m_leftOptionalMotorConfigurator.apply(m_leftOptionalMotorOutputConfigs);
 
       // Setting as follower
       m_optionalLeftMotor.setControl(
-        new Follower(m_rightMotor.getDeviceID(), false)
+        new Follower(m_leftMotor.getDeviceID(), false)
       );
     }
     catch (Exception e)
@@ -100,6 +100,17 @@ public class DriveSubsystem extends SubsystemBase {
   {
     setDefaultCommand(new ArcadeDriveCommand(this, leftJoystick));
   }
+
+  // Sets left and right motors to set speeds to support tank drive models.
+  public void setTankSpeeds(double leftInput, double rightInput)
+  {
+    m_leftSpeed = (leftInput / DrivetrainConstants.kSpeedDivider);
+    m_rightSpeed = (rightInput / DrivetrainConstants.kSpeedDivider);
+
+    // NOTE: We are squaring the input to improve driver response
+    m_Drivetrain.tankDrive(m_leftSpeed, m_rightSpeed, true);
+  }
+
 
   public void setArcadeSpeeds(double speed, double rotation)
   {
