@@ -30,5 +30,6 @@ public final class Constants {
 
   public static class AutoConstants {
     public static final double kPassLineSpeed = 0.40;
+    public static final double kTurnInnerSpeed = 0.35;
   }
 }

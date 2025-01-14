@@ -52,7 +52,7 @@ public class RobotContainer {
 
     // Turn Left
     AutonomousDrive autoDriveLeft = new AutonomousDrive(m_driveSubsystem, 
-      AutoConstants.kPassLineSpeed/1.5, AutoConstants.kPassLineSpeed);
+      AutoConstants.kTurnInnerSpeed, AutoConstants.kPassLineSpeed);
 
     // Drop-down chooser for auto program.
     m_autoChooser.setDefaultOption("Drive Forward 2 Seconds", 
