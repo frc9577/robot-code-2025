@@ -2,12 +2,11 @@
 
 package frc.robot.commands;
 
-import frc.robot.Constants.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class AutonomousDriveForward extends Command {
+public class AutonomousDrive extends Command {
   private final DriveSubsystem m_subsystem;
   private double m_leftSpeed = 0.0;
   private double m_rightSpeed = 0.0;
@@ -17,9 +16,12 @@ public class AutonomousDriveForward extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public AutonomousDriveForward(DriveSubsystem subsystem) 
+  public AutonomousDrive(DriveSubsystem subsystem, double leftSpeed, double rightSpeed) 
   {
     m_subsystem = subsystem;
+    
+    m_leftSpeed = leftSpeed;
+    m_rightSpeed = rightSpeed;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
@@ -29,9 +31,6 @@ public class AutonomousDriveForward extends Command {
   @Override
   public void initialize() {
     m_subsystem.setTankSpeeds(0.0, 0.0);
-
-    m_leftSpeed = AutoConstants.kPassLineSpeed;
-    m_rightSpeed = AutoConstants.kPassLineSpeed;
   }
 
   // Called every time the scheduler runs while the command is scheduled.

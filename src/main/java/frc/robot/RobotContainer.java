@@ -4,8 +4,9 @@
 
 package frc.robot;
 
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.AutonomousDriveForward;
+import frc.robot.commands.AutonomousDrive;
 import frc.robot.commands.TimedCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
@@ -45,10 +46,25 @@ public class RobotContainer {
   //
   private void configureDriverStationControls()
   {
+    // Drive Forward
+    AutonomousDrive autoDriveForward = new AutonomousDrive(m_driveSubsystem, 
+      AutoConstants.kPassLineSpeed, AutoConstants.kPassLineSpeed);
+
+    // Turn Left
+    AutonomousDrive autoDriveLeft = new AutonomousDrive(m_driveSubsystem, 
+      AutoConstants.kPassLineSpeed/1.5, AutoConstants.kPassLineSpeed);
+
     // Drop-down chooser for auto program.
-    AutonomousDriveForward autoDriveForward = new AutonomousDriveForward(m_driveSubsystem);
     m_autoChooser.setDefaultOption("Drive Forward 2 Seconds", 
       new TimedCommand(autoDriveForward, 2000));
+    
+    m_autoChooser.addOption("Turn left 2 Seconds", 
+      new TimedCommand(autoDriveLeft, 2000));
+    
+    m_autoChooser.addOption("Drive forward 2 seconds then turn left 2 Seconds", 
+      new TimedCommand(autoDriveForward, 2000).andThen(
+        new TimedCommand(autoDriveLeft, 2000)
+      ));
 
     SmartDashboard.putData(m_autoChooser);
   }
