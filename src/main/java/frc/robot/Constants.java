@@ -17,6 +17,7 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
   }
 
+  // 10's and 20's range
   public static class DrivetrainConstants {
     public static final int kLeftMotorCANID = 10;
     public static final int kOptionalLeftMotorCANID = 11;
@@ -31,5 +32,13 @@ public final class Constants {
   public static class AutoConstants {
     public static final double kPassLineSpeed = 0.40;
     public static final double kTurnInnerSpeed = 0.35;
+  }
+
+  // 30 range
+  public static class CoralConstants {
+    public static final int kIntakeMotorCANID = 30;
+    public static final int kOutputMotorCANID = 31;
+
+    public static final int kSensorChannel = 32;
   }
 }
