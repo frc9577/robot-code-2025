@@ -11,6 +11,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -38,6 +39,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     final TalonFXConfigurator m_rightMotorConfigurator = m_rightMotor.getConfigurator();
     m_rightMotorConfigurator.apply(m_rightMotorOutputConfigs);
+    SendableRegistry.setName(m_rightMotor, "RightMotorGroup", "LeadMotor");
 
     // Optional Right Motor
     try {
@@ -56,6 +58,8 @@ public class DriveSubsystem extends SubsystemBase {
       m_optionalRightMotor.setControl(
         new Follower(m_rightMotor.getDeviceID(), false)
       );
+
+      SendableRegistry.setName(m_optionalRightMotor, "RightMotorGroup", "FollowerMotor");
     }
     catch (Exception e)
     {
@@ -68,6 +72,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     final TalonFXConfigurator m_leftMotorConfigurator = m_leftMotor.getConfigurator();
     m_leftMotorConfigurator.apply(m_leftMotorOutputConfigs);
+    SendableRegistry.setName(m_leftMotor, "LeftMotorGroup", "LeadMotor");
 
     // Optional Left Motor
     try {
@@ -86,6 +91,8 @@ public class DriveSubsystem extends SubsystemBase {
       m_optionalLeftMotor.setControl(
         new Follower(m_leftMotor.getDeviceID(), false)
       );
+
+      SendableRegistry.setName(m_optionalLeftMotor, "LeftMotorGroup", "FollowerMotor");
     }
     catch (Exception e)
     {
