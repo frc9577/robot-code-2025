@@ -8,6 +8,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CoralConstants;
 
@@ -15,10 +16,10 @@ public class CoralSubsystem extends SubsystemBase {
   private double m_intakeSpeed = 0;
   private double m_outputSpeed = 0;
 
-  private final SparkMax m_intakeMotor = new SparkMax(CoralConstants.kIntakeMotorCANID, 
-                                                            MotorType.kBrushless);
-  private final SparkMax m_outputMotor = new SparkMax(CoralConstants.kOutputMotorCANID,
-                                                            MotorType.kBrushless);
+  //private final SparkMax m_intakeMotor = new SparkMax(CoralConstants.kIntakeMotorCANID, 
+  //                                                          MotorType.kBrushless);
+  //private final SparkMax m_outputMotor = new SparkMax(CoralConstants.kOutputMotorCANID,
+  //                                                          MotorType.kBrushless);
 
   private final DigitalInput m_Sensor = new DigitalInput(CoralConstants.kSensorChannel);
 
@@ -27,7 +28,7 @@ public class CoralSubsystem extends SubsystemBase {
 
   public void setIntakeSpeed(double speed)
   {
-    m_intakeMotor.set(speed);
+    //m_intakeMotor.set(speed);
     m_intakeSpeed = speed;
   }
   
@@ -39,7 +40,7 @@ public class CoralSubsystem extends SubsystemBase {
 
   public void setOutputSpeed(double speed)
   {
-    m_outputMotor.set(speed);
+    //m_outputMotor.set(speed);
     m_outputSpeed = speed;
   }
 
@@ -51,12 +52,14 @@ public class CoralSubsystem extends SubsystemBase {
 
   public boolean hasCoral()
   {
-    return !m_Sensor.get();
+    boolean sensorRead = m_Sensor.get();
+    return CoralConstants.kSensorFalseIsEmpty ? sensorRead : !sensorRead;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Has Coral", hasCoral());
   }
 
   @Override

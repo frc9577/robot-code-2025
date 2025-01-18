@@ -39,6 +39,7 @@ public final class Constants {
     public static final int kIntakeMotorCANID = 30;
     public static final int kOutputMotorCANID = 31;
 
-    public static final int kSensorChannel = 32;
+    public static final int kSensorChannel = 0;
+    public static final boolean kSensorFalseIsEmpty = false;
   }
 }
