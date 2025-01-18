@@ -11,9 +11,11 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import au.grapplerobotics.LaserCan;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
 import frc.robot.commands.ArcadeDriveCommand;
@@ -29,6 +31,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   private double m_leftSpeed  = 0.0;
   private double m_rightSpeed = 0.0;
+
+  private final LaserCan m_laserCan = new LaserCan(DrivetrainConstants.kLaserCanCANID);
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -139,6 +143,13 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    LaserCan.Measurement measurement = m_laserCan.getMeasurement();
+    if (measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
+      SmartDashboard.putNumber("laserCan Distance mm", measurement.distance_mm);
+    } else {
+      // puts non-sensical number to show that its not picking up
+      SmartDashboard.putNumber("laserCan Distance mm", -1.0);
+    }
   }
 
   @Override
