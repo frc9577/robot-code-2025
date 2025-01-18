@@ -39,7 +39,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     final TalonFXConfigurator m_rightMotorConfigurator = m_rightMotor.getConfigurator();
     m_rightMotorConfigurator.apply(m_rightMotorOutputConfigs);
-    SendableRegistry.setName(m_rightMotor, "RightMotorGroup", "LeadMotor");
+    SendableRegistry.setName(m_rightMotor, "DriveSubsystem", "rightMotor");
 
     // Optional Right Motor
     try {
@@ -58,8 +58,6 @@ public class DriveSubsystem extends SubsystemBase {
       m_optionalRightMotor.setControl(
         new Follower(m_rightMotor.getDeviceID(), false)
       );
-
-      SendableRegistry.setName(m_optionalRightMotor, "RightMotorGroup", "FollowerMotor");
     }
     catch (Exception e)
     {
@@ -72,7 +70,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     final TalonFXConfigurator m_leftMotorConfigurator = m_leftMotor.getConfigurator();
     m_leftMotorConfigurator.apply(m_leftMotorOutputConfigs);
-    SendableRegistry.setName(m_leftMotor, "LeftMotorGroup", "LeadMotor");
+    SendableRegistry.setName(m_leftMotor, "DriveSubsystem", "leftMotor");
 
     // Optional Left Motor
     try {
@@ -91,8 +89,6 @@ public class DriveSubsystem extends SubsystemBase {
       m_optionalLeftMotor.setControl(
         new Follower(m_leftMotor.getDeviceID(), false)
       );
-
-      SendableRegistry.setName(m_optionalLeftMotor, "LeftMotorGroup", "FollowerMotor");
     }
     catch (Exception e)
     {
@@ -101,6 +97,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     // Setting up the drive train
     m_Drivetrain = new DifferentialDrive(m_leftMotor::set, m_rightMotor::set);
+    SendableRegistry.setName(m_Drivetrain, "DriveSubsystem", "Drivetrain");
   }
 
   public void initDefaultCommand(Joystick leftJoystick)
@@ -117,7 +114,6 @@ public class DriveSubsystem extends SubsystemBase {
     // NOTE: We are squaring the input to improve driver response
     m_Drivetrain.tankDrive(m_leftSpeed, m_rightSpeed, true);
   }
-
 
   public void setArcadeSpeeds(double speed, double rotation)
   {
