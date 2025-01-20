@@ -24,8 +24,8 @@ public final class Constants {
     public static final int kRightMotorCANID = 20;
     public static final int kOptionalRightMotorCANID = 21;
 
-    public static final double kTurnDivider = 2.0;
-    public static final double kSpeedDivider = 2.0;
+    public static final double kTurnDivider = 1.0;
+    public static final double kSpeedDivider = 1.0;
 
     public static final int kLaserCanCANID = 30;
   }
