@@ -11,7 +11,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-//import au.grapplerobotics.LaserCan;
+import au.grapplerobotics.ConfigurationFailedException;
+import au.grapplerobotics.LaserCan;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -32,7 +33,9 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_leftSpeed  = 0.0;
   private double m_rightSpeed = 0.0;
 
-  // private final LaserCan m_laserCan = new LaserCan(DrivetrainConstants.kLaserCanCANID);
+  private final LaserCan m_laserCan = new LaserCan(DrivetrainConstants.kLaserCanCANID);
+
+  private int m_tick = 0;
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -102,6 +105,14 @@ public class DriveSubsystem extends SubsystemBase {
     // Setting up the drive train
     m_Drivetrain = new DifferentialDrive(m_leftMotor::set, m_rightMotor::set);
     SendableRegistry.setName(m_Drivetrain, "DriveSubsystem", "Drivetrain");
+
+    // Setting up the laserCAN
+    try {
+      m_laserCan.setRangingMode(LaserCan.RangingMode.SHORT);
+      m_laserCan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_100MS);
+    } catch (ConfigurationFailedException e) {
+      e.printStackTrace();
+    }    
   }
 
   public void initDefaultCommand(Joystick leftJoystick)
@@ -143,13 +154,17 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    //LaserCan.Measurement measurement = m_laserCan.getMeasurement();
-    //if (measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
-    //  SmartDashboard.putNumber("laserCan Distance mm", measurement.distance_mm);
-    //} else {
-    //  // puts non-sensical number to show that its not picking up
-    //  SmartDashboard.putNumber("laserCan Distance mm", -1.0);
-    //}
+    if ((m_tick % 5) == 0) {
+      //LaserCan.Measurement measurement = m_laserCan.getMeasurement();
+      //if (measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
+      //  SmartDashboard.putNumber("laserCan Distance mm", measurement.distance_mm);
+      //} else {
+      //  // puts non-sensical number to show that its not picking up
+      //  SmartDashboard.putNumber("laserCan Distance mm", -1.0);
+      //}
+    }
+
+    m_tick += 1;
   }
 
   @Override
