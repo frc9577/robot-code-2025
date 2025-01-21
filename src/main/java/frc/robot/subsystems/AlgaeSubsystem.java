@@ -54,7 +54,7 @@ public class AlgaeSubsystem extends SubsystemBase {
         m_Solenoid.set(newValue);
     }
 
-    // gets the position (state) of the mechanism
+    // gets the last commanded position (state) of the mechanism
     public State getPosition()
     {
         return m_currentState;
@@ -73,7 +73,7 @@ public class AlgaeSubsystem extends SubsystemBase {
         m_MotorSpeed = speed;
     }
 
-    // gets the speed of the intake
+    // gets the last commanded speed for the intake
     public double getIntakeSpeed() {
         return m_MotorSpeed;
     }
