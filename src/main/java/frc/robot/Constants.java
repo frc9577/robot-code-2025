@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -13,6 +15,11 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static class RobotConstants {
+    public static final double minPnuematicsPressure = 80.0;
+    public static final double maxPnuematicsPressure = 120.0;
+  }
+
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
@@ -36,10 +43,27 @@ public final class Constants {
   }
 
   public static class CoralConstants {
-    public static final int kIntakeMotorCANID = 31;
-    public static final int kOutputMotorCANID = 32;
+    public static final int kIntakeMotorCANID = 40;
+    public static final int kOutputMotorCANID = 41;
 
     public static final int kSensorChannel = 0;
     public static final boolean kSensorFalseIsEmpty = false;
+  }
+
+  public static class AlgaeConstants {
+    public static final int kMotorCANID = 50;
+
+    public static final int kPneumaticsHubCANid = 1;
+
+    public static final int kSensorChannel = 1;
+    public static final boolean kSensorFalseIsEmpty = false;
+
+    // Temp Values, Needs to be changed when solunoid is set up onto the robot
+    public static final int kExtendChannel = 8;
+    public static final int kRetractChannel = 7;
+
+    public static final DoubleSolenoid.Value kOffState = DoubleSolenoid.Value.kOff;
+    public static final DoubleSolenoid.Value kDeployedState = DoubleSolenoid.Value.kForward;
+    public static final DoubleSolenoid.Value kReteactedState = DoubleSolenoid.Value.kReverse;
   }
 }
