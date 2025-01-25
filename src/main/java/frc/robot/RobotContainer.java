@@ -8,8 +8,9 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutonomousDrive;
 import frc.robot.commands.TimedCommand;
-import frc.robot.subsystems.CoralSubsystem;
+//import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,7 +30,8 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
-  private final CoralSubsystem m_coralSubsystem = new CoralSubsystem();
+  //private final CoralSubsystem m_coralSubsystem = new CoralSubsystem();
+  private final ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
 
   // Joysticks
   private final Joystick m_driverJoystick = new Joystick(OperatorConstants.kDriverControllerPort);

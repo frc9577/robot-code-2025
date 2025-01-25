@@ -66,4 +66,11 @@ public final class Constants {
     public static final DoubleSolenoid.Value kDeployedState = DoubleSolenoid.Value.kForward;
     public static final DoubleSolenoid.Value kReteactedState = DoubleSolenoid.Value.kReverse;
   }
+
+  public static class ElevatorConstants {
+    public static final int kMotorCANID = 60;
+
+    public static final int kSensorChannel = 0;
+    public static final boolean kSensorFalseIsEmpty = false;
+  }
 }
