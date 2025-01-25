@@ -155,13 +155,13 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     if ((m_tick % 5) == 0) {
-      //LaserCan.Measurement measurement = m_laserCan.getMeasurement();
-      //if (measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
-      //  SmartDashboard.putNumber("laserCan Distance mm", measurement.distance_mm);
-      //} else {
-      //  // puts non-sensical number to show that its not picking up
-      //  SmartDashboard.putNumber("laserCan Distance mm", -1.0);
-      //}
+      LaserCan.Measurement measurement = m_laserCan.getMeasurement();
+      if (measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
+       SmartDashboard.putNumber("laserCan Distance mm", measurement.distance_mm);
+      } else {
+       // puts non-sensical number to show that its not picking up
+       SmartDashboard.putNumber("laserCan Distance mm", -1.0);
+      }
     }
 
     m_tick += 1;
