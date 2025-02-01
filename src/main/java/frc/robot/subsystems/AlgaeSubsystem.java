@@ -27,8 +27,10 @@ public class AlgaeSubsystem extends SubsystemBase {
         // We need to know if the motor controller we need is
         // actually present on the CAN bus and, unfortunately, the 
         // constructor doesn't seem to throw an exception in this case. 
-        // Let's query for CAN error status and use this for now.
-        if (m_Motor.getFaults().can)
+        // Let's query for firmare error status and use this for now.
+        // Note that, for some reason, we can't rely on the CAN fault in
+        // this case. Go figure.
+        if (m_Motor.getFaults().firmware)
         {
         throw new RuntimeException("Algae subsystem motor not present");
         }

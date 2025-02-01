@@ -35,8 +35,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     // We need to know if the motor controller we need is
     // actually present on the CAN bus and, unfortunately, the 
     // constructor doesn't seem to throw an exception in this case. 
-    // Let's query for CAN error status and use this for now.
-    if (m_motor.getFaults().can)
+    // Let's query for firmware error status and use this for now.
+    if (m_motor.getFaults().firmware)
     {
       throw new RuntimeException("Elevator subsystem motor not present");
     }

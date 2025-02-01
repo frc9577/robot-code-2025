@@ -32,8 +32,8 @@ public class CoralSubsystem extends SubsystemBase {
     // We need to know if the motor controllers we need are
     // actually present on the CAN bus and, unfortunately, their 
     // constructors don't seem to throw exceptions in this case. Let's
-    // query the CAN fault status and use this for now.
-    if (m_intakeMotor.getFaults().can || m_outputMotor.getFaults().can)
+    // query the firmware fault status and use this for now.
+    if (m_intakeMotor.getFaults().firmware || m_outputMotor.getFaults().firmware)
     {
       throw new RuntimeException("Coral subsystem motors not present");
     }
