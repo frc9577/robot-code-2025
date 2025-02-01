@@ -29,7 +29,16 @@ public class CoralSubsystem extends SubsystemBase {
   private final DigitalInput m_BackSensor = new DigitalInput(CoralConstants.kBackSensorChannel);
 
   /** Creates a new CoralSubsystem. */
-  public CoralSubsystem() {}
+  public CoralSubsystem() {
+    // We need to know if the motor controllers we need are
+    // actually present on the CAN bus and, unfortunately, their 
+    // constructors don't see to throw exceptions in this case. Let's
+    // ask for the encoder handle and see if it's valid.
+    if (m_intakeMotor.getFaults().can || m_outputMotor.getFaults().can)
+    {
+      throw new RuntimeException("Coral subsystem motors not present");
+    }
+  }
 
   public void setIntakeSpeed(double speed)
   {
