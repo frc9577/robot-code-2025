@@ -22,7 +22,17 @@ public class AlgaeSubsystem extends SubsystemBase {
     private final SparkMax m_Motor = new SparkMax(AlgaeConstants.kMotorCANID, MotorType.kBrushless);
 
     /** Creates a new AlgaeSubsystem. */
-    public AlgaeSubsystem() {}
+    public AlgaeSubsystem() 
+    {
+        // We need to know if the motor controller we need is
+        // actually present on the CAN bus and, unfortunately, the 
+        // constructor doesn't seem to throw an exception in this case. 
+        // Let's query for CAN error status and use this for now.
+        if (m_Motor.getFaults().can)
+        {
+        throw new RuntimeException("Algae subsystem motor not present");
+        }
+    }
 
     public enum State {
       OFF,

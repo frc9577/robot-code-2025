@@ -12,7 +12,6 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CoralConstants;
 
@@ -32,8 +31,8 @@ public class CoralSubsystem extends SubsystemBase {
   public CoralSubsystem() {
     // We need to know if the motor controllers we need are
     // actually present on the CAN bus and, unfortunately, their 
-    // constructors don't see to throw exceptions in this case. Let's
-    // ask for the encoder handle and see if it's valid.
+    // constructors don't seem to throw exceptions in this case. Let's
+    // query the CAN fault status and use this for now.
     if (m_intakeMotor.getFaults().can || m_outputMotor.getFaults().can)
     {
       throw new RuntimeException("Coral subsystem motors not present");
@@ -84,15 +83,6 @@ public class CoralSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
-    // TODO: You may want to subdivide this so that it doesn't update too quickly.
-    // We may also want to centralize all the updates an call a function from the
-    // top level robot periodic() function instead of having each subsystem send
-    // their own data. That high level function would poll subsystems for status
-    // and send all data from a single place.
-    SmartDashboard.putBoolean("Has Coral", hasCoral());
-    SmartDashboard.putBoolean("Coral Front", detectsCoralAtFront());
-    SmartDashboard.putBoolean("Coral Back", detectsCoralAtBack());
   }
 
   @Override

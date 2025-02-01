@@ -43,6 +43,9 @@ public class RobotContainer {
   // Joysticks
   private final Joystick m_driverJoystick = new Joystick(OperatorConstants.kDriverControllerPort);
 
+  // Keep track of time for SmartDashboard updates.
+  static int m_iTickCount = 0;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     m_intakeSubsystem = getSubsystem(IntakeSubsystem.class);
@@ -59,7 +62,7 @@ public class RobotContainer {
 
   // Tom wrote this cool template to make the optional subsystem creation code in
   // the constructor above a lot clearer. This is what clever coding looks like.
-  private <SSC> Optional<SSC> getSubsystem(Class<SSC> subsystemClass) {
+  private static <SSC> Optional<SSC> getSubsystem(Class<SSC> subsystemClass) {
     Optional<SSC> iss;
     try {
       iss = Optional.ofNullable(subsystemClass.getDeclaredConstructor().newInstance());
@@ -116,6 +119,11 @@ public class RobotContainer {
     // known position before feeding coral into it). That will require different logic
     // to make sure that both dependent subsystems are valid before the binding is added.
 
+    SmartDashboard.putBoolean("Intake Subsystem", m_intakeSubsystem.isPresent());
+    SmartDashboard.putBoolean("Coral Subsystem", m_coralSubsystem.isPresent());
+    SmartDashboard.putBoolean("Elevator Subsystem", m_elevatorSubsystem.isPresent());
+    SmartDashboard.putBoolean("Algae Subsystem", m_algaeSubsystem.isPresent());
+
     if (m_intakeSubsystem.isPresent())
     {
       // Bind operator controls related to the coral subsystem only if it is present on
@@ -160,5 +168,46 @@ public class RobotContainer {
 
   public void setDriveType() {
     m_driveSubsystem.initDefaultCommand(m_driverJoystick);
+  }
+
+  public void UpdateSmartDashboard()
+  {
+    // TODO: Use m_iTickCount to determine which status updates to send back to
+    // the driver station. This function is called every 20mS.
+
+    // Drive subsystem (always present)
+    if((m_iTickCount % Constants.DrivetrainConstants.kTicksPerUpdate) == 0)
+    {
+      SmartDashboard.putNumber("LIDAR Distance", m_driveSubsystem.getDistanceReading());
+    }
+
+    // Coral subsystem state update.
+    if(m_coralSubsystem.isPresent() && (m_iTickCount % Constants.CoralConstants.kTicksPerUpdate) == 0)
+    {
+      SmartDashboard.putBoolean("Has Coral", m_coralSubsystem.get().hasCoral());
+      SmartDashboard.putBoolean("Coral Front", m_coralSubsystem.get().detectsCoralAtFront());
+      SmartDashboard.putBoolean("Coral Back", m_coralSubsystem.get().detectsCoralAtBack());
+    }
+
+    // Elevator subsystem state update.
+    if(m_elevatorSubsystem.isPresent() && (m_iTickCount % Constants.ElevatorConstants.kTicksPerUpdate) == 0)
+    {
+      SmartDashboard.putNumber("Elevator Encoder", m_elevatorSubsystem.get().getPosition());
+      SmartDashboard.putBoolean("Elevator Down", m_elevatorSubsystem.get().isElevatorDown());
+    }
+    
+    // Intake subsystem state update.
+    if(m_intakeSubsystem.isPresent() && (m_iTickCount % Constants.IntakeConstants.kTicksPerUpdate) == 0)
+    {
+      // TODO: Do intake stuff here.
+    }
+
+    // Algae subsystem state update.
+    if(m_algaeSubsystem.isPresent() && (m_iTickCount % Constants.AlgaeConstants.kTicksPerUpdate) == 0)
+    {
+      SmartDashboard.putBoolean("Has Algae", m_algaeSubsystem.get().hasAlgae());
+    }
+
+    m_iTickCount++;
   }
 }

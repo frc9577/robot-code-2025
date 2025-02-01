@@ -25,6 +25,31 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
  // 3. Pneumatics channels must be unique across the whole robot (assuming we're using
  // a single pneumatics hub)
 
+ // Current CAN IDs:
+ //   01 - Pneumatics hub
+ //   10 - Drive left primary
+ //   11 - Drive left follower
+ //   20 - Drive right primary
+ //   21 - Drive right follower
+ //   30 - LaserCAN
+ //   40 - Coral handler input side motor  
+ //   41 - Coral handler output side motor
+ //   50 - Algae handler motor
+ //   60 - Elevator motor
+ //   70 - Coral ramp intake motor
+ //
+ // Current DIO Channels:
+ //
+ // 0 - Coral handler front sensor
+ // 1 - Coral handler rear sensor
+ // 2 - Coral ramp intake sensor
+ // 3 - Algae sensor
+ // 4 - Elevator bottom sensor
+ // 5 -
+ // 6 -
+ // 7 -
+ //
+
  public final class Constants {
   public static class RobotConstants {
     public static final double minPnuematicsPressure = 80.0;
@@ -46,11 +71,24 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     public static final double kSpeedDivider = 1.0;
 
     public static final int kLaserCanCANID = 30;
+
+    // SmartDashboard update frequency for drive subsystem state in 20ms counts.
+    public static final int kTicksPerUpdate = 5;
   }
 
   public static class AutoConstants {
     public static final double kPassLineSpeed = 0.40;
     public static final double kTurnInnerSpeed = 0.35;
+  }
+
+  public static class IntakeConstants {
+    public static final int kMotorCANID = 70;
+
+    public static final int kSensorChannel = 2;
+    public static final boolean kSensorFalseIsEmpty = false;
+
+    // SmartDashboard update frequency for intake subsystem state in 20ms counts.
+    public static final int kTicksPerUpdate = 22;
   }
 
   public static class CoralConstants {
@@ -66,6 +104,9 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     // back (input) side of the coral handler.
     public static final int kBackSensorChannel = 1;
     public static final boolean kBackSensorFalseIsEmpty = false;
+
+    // SmartDashboard update frequency for coral subsystem state in 20ms counts.
+    public static final int kTicksPerUpdate = 10;
   }
 
   public static class AlgaeConstants {
@@ -73,7 +114,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
     public static final int kPneumaticsHubCANid = 1;
 
-    public static final int kSensorChannel = 2;
+    public static final int kSensorChannel = 3;
     public static final boolean kSensorFalseIsEmpty = false;
 
     // Temp Values, Needs to be changed when solunoid is set up onto the robot
@@ -83,12 +124,18 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     public static final DoubleSolenoid.Value kOffState = DoubleSolenoid.Value.kOff;
     public static final DoubleSolenoid.Value kDeployedState = DoubleSolenoid.Value.kForward;
     public static final DoubleSolenoid.Value kReteactedState = DoubleSolenoid.Value.kReverse;
+
+    // SmartDashboard update frequency for algae subsystem state in 20ms counts.
+    public static final int kTicksPerUpdate = 25;
   }
 
   public static class ElevatorConstants {
     public static final int kMotorCANID = 60;
 
-    public static final int kSensorChannel = 3;
+    public static final int kSensorChannel = 4;
     public static final boolean kSensorFalseIsEmpty = false;
+
+    // SmartDashboard update frequency for elevator subsystem state in 20ms counts.
+    public static final int kTicksPerUpdate = 5;
   }
 }

@@ -19,7 +19,6 @@ import au.grapplerobotics.LaserCan;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
 import frc.robot.commands.ArcadeDriveCommand;
@@ -37,8 +36,6 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_rightSpeed = 0.0;
 
   private final LaserCan m_laserCan = new LaserCan(DrivetrainConstants.kLaserCanCANID);
-
-  private int m_tick = 0;
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -164,24 +161,24 @@ public class DriveSubsystem extends SubsystemBase {
     }
   }
 
+  // Return the distance between the front of the robot and the object ahead in metres.
+  public double getDistanceReading()
+  {
+    LaserCan.Measurement measurement = m_laserCan.getMeasurement();
+
+    // Was the measurement valid?
+    if ((measurement != null) && (measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT))
+    {
+      // Yes, return it.
+      return (measurement.distance_mm/1000.0);
+    } 
+
+     // Return a marker to show that no measurement is can be made.
+    return (-1.0);
+  }
+
   @Override
   public void periodic() {
-    // TODO: As I suggested elsewhere, I think we should centralize these updates and have a high
-    // level function poll subsystems for status before sending all SmartDashboard updates from
-    // there.
-    
-    // This method will be called once per scheduler run
-    if ((m_tick % 5) == 0) {
-      LaserCan.Measurement measurement = m_laserCan.getMeasurement();
-      if (measurement != null && measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
-       SmartDashboard.putNumber("laserCan Distance mm", measurement.distance_mm);
-      } else {
-       // puts non-sensical number to show that its not picking up
-       SmartDashboard.putNumber("laserCan Distance mm", -1.0);
-      }
-    }
-
-    m_tick += 1;
   }
 
   @Override

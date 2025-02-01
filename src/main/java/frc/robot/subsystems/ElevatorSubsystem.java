@@ -11,7 +11,6 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 
@@ -32,7 +31,16 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final DigitalInput m_Sensor = new DigitalInput(ElevatorConstants.kSensorChannel);
 
   /** Creates a new ElevatorSubsystem. */
-  public ElevatorSubsystem() {}
+  public ElevatorSubsystem() {
+    // We need to know if the motor controller we need is
+    // actually present on the CAN bus and, unfortunately, the 
+    // constructor doesn't seem to throw an exception in this case. 
+    // Let's query for CAN error status and use this for now.
+    if (m_motor.getFaults().can)
+    {
+      throw new RuntimeException("Elevator subsystem motor not present");
+    }
+  }
 
   public void setMotorSpeed(double speed)
   {
@@ -52,6 +60,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     return ElevatorConstants.kSensorFalseIsEmpty ? sensorRead : !sensorRead;
   }
 
+  public double getPosition()
+  {
+    // TODO: Return the current position of the elevator (in metres above 0?)
+    return 0.0;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -61,9 +75,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     if (isElevatorDown() == true) {
       motorEncoder.setPosition(0.0);
     }
-
-    SmartDashboard.putNumber("Elevator Encoder", motorEncoder.getPosition());
-    SmartDashboard.putBoolean("Is Elevator Down", isElevatorDown());
   }
 
   @Override
