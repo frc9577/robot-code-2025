@@ -2,6 +2,10 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+// TODO: Class header comment explaining what this class manages. For
+// example, does it manage only the coral handler on the elevator or does
+// it include intake mechanism too?
+
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -21,6 +25,7 @@ public class CoralSubsystem extends SubsystemBase {
   //private final SparkMax m_outputMotor = new SparkMax(CoralConstants.kOutputMotorCANID,
   //                                                          MotorType.kBrushless);
 
+  // TODO: Which sensor? I assume there will need to be several.
   private final DigitalInput m_Sensor = new DigitalInput(CoralConstants.kSensorChannel);
 
   /** Creates a new CoralSubsystem. */
@@ -59,6 +64,12 @@ public class CoralSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    // TODO: You may want to subdivide this so tht it doesn't update too quickly.
+    // We may also want to centralize all the updates an call a function from the
+    // top level robot periodic() function instead of having each subsystem send
+    // their own data. That high level function would poll subsystems for status
+    // and send all data from a single place.
     SmartDashboard.putBoolean("Has Coral", hasCoral());
   }
 

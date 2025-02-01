@@ -2,6 +2,9 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+// TODO: Class header comment. What does this class do and what assumptions
+// (if any) is it making?
+
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
@@ -99,6 +102,14 @@ public class DriveSubsystem extends SubsystemBase {
     }
     catch (Exception e)
     {
+      // TODO: There are really two cases you want to catch. The first, when the follower
+      // motor controller doesn't exist, isn't an error. The second, where the motor exists
+      // but one of the later configuration calls fails, is an error. Generally, you would
+      // only dump a stack trace in error cases and you definitely don't want to do this in
+      // normal operation. I would suggest splitting this block into two try/except chunks,
+      // on that catches the missing controller and just outputs a status message to the log
+      // indicating that only one motor is in use, and the other catching the real errors
+      // and dumping the stack trace.
       e.printStackTrace();
     }
 
@@ -111,6 +122,8 @@ public class DriveSubsystem extends SubsystemBase {
       m_laserCan.setRangingMode(LaserCan.RangingMode.SHORT);
       m_laserCan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_100MS);
     } catch (ConfigurationFailedException e) {
+      // TODO: Same as above. This isn't a fatal error. Just set a flag indicating that the 
+      // rangefinder isn't available and output a status message to the log. 
       e.printStackTrace();
     }    
   }
@@ -153,6 +166,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    // TODO: As I suggested elsewhere, I think we should centralize these updates and have a high
+    // level function poll subsystems for status before sending all SmartDashboard updates from
+    // there.
+    
     // This method will be called once per scheduler run
     if ((m_tick % 5) == 0) {
       LaserCan.Measurement measurement = m_laserCan.getMeasurement();

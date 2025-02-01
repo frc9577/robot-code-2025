@@ -2,6 +2,8 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+// TODO: Class header comment. What does this class do?
+
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -13,12 +15,20 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 
+// TODO: This class likely needs to be significantly reworked since we need to be
+// able to control the position of the elevator rather than the speed. We'll likely
+// use the internal SparkMax position controller to do this so your methods will 
+// end up being along the lines of setTargetHeight(), getTargetHeight(), getCurrentHeight(),
+// etc.
+
 public class ElevatorSubsystem extends SubsystemBase {
   private double m_motorSpeed = 0;
 
   private final SparkMax m_motor = new SparkMax(ElevatorConstants.kMotorCANID, 
                                                             MotorType.kBrushless);
 
+  // TODO: Consider renaming this. What sensor is this? Temperature, ambient light level,
+  // camera or, perhaps, a home position detector :-)
   private final DigitalInput m_Sensor = new DigitalInput(ElevatorConstants.kSensorChannel);
 
   /** Creates a new ElevatorSubsystem. */
