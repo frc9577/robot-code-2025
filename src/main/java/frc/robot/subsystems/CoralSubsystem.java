@@ -20,20 +20,20 @@ public class CoralSubsystem extends SubsystemBase {
   private double m_intakeSpeed = 0;
   private double m_outputSpeed = 0;
 
-  //private final SparkMax m_intakeMotor = new SparkMax(CoralConstants.kIntakeMotorCANID, 
-  //                                                          MotorType.kBrushless);
-  //private final SparkMax m_outputMotor = new SparkMax(CoralConstants.kOutputMotorCANID,
-  //                                                          MotorType.kBrushless);
+  private final SparkMax m_intakeMotor = new SparkMax(CoralConstants.kIntakeMotorCANID, 
+                                                      MotorType.kBrushless);
+  private final SparkMax m_outputMotor = new SparkMax(CoralConstants.kOutputMotorCANID,
+                                                      MotorType.kBrushless);
 
-  // TODO: Which sensor? I assume there will need to be several.
-  private final DigitalInput m_Sensor = new DigitalInput(CoralConstants.kSensorChannel);
+  private final DigitalInput m_FrontSensor = new DigitalInput(CoralConstants.kFrontSensorChannel);
+  private final DigitalInput m_BackSensor = new DigitalInput(CoralConstants.kBackSensorChannel);
 
   /** Creates a new CoralSubsystem. */
   public CoralSubsystem() {}
 
   public void setIntakeSpeed(double speed)
   {
-    //m_intakeMotor.set(speed);
+    m_intakeMotor.set(speed);
     m_intakeSpeed = speed;
   }
   
@@ -45,7 +45,7 @@ public class CoralSubsystem extends SubsystemBase {
 
   public void setOutputSpeed(double speed)
   {
-    //m_outputMotor.set(speed);
+    m_outputMotor.set(speed);
     m_outputSpeed = speed;
   }
 
@@ -55,22 +55,35 @@ public class CoralSubsystem extends SubsystemBase {
     return m_outputSpeed;
   }
 
+  public boolean detectsCoralAtFront()
+  {
+    boolean sensorRead = m_FrontSensor.get();
+    return CoralConstants.kFrontSensorFalseIsEmpty ? sensorRead : !sensorRead;
+  }
+  
+  public boolean detectsCoralAtBack()
+  {
+    boolean sensorRead = m_BackSensor.get();
+    return CoralConstants.kBackSensorFalseIsEmpty ? sensorRead : !sensorRead;
+  }
+
   public boolean hasCoral()
   {
-    boolean sensorRead = m_Sensor.get();
-    return CoralConstants.kSensorFalseIsEmpty ? sensorRead : !sensorRead;
+    return (detectsCoralAtFront() || detectsCoralAtBack());
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
 
-    // TODO: You may want to subdivide this so tht it doesn't update too quickly.
+    // TODO: You may want to subdivide this so that it doesn't update too quickly.
     // We may also want to centralize all the updates an call a function from the
     // top level robot periodic() function instead of having each subsystem send
     // their own data. That high level function would poll subsystems for status
     // and send all data from a single place.
     SmartDashboard.putBoolean("Has Coral", hasCoral());
+    SmartDashboard.putBoolean("Coral Front", detectsCoralAtFront());
+    SmartDashboard.putBoolean("Coral Back", detectsCoralAtBack());
   }
 
   @Override

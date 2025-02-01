@@ -8,9 +8,14 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutonomousDrive;
 import frc.robot.commands.TimedCommand;
-//import frc.robot.subsystems.CoralSubsystem;
+import frc.robot.subsystems.AlgaeSubsystem;
+import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+
+import java.util.Optional;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,19 +35,39 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
-  //private final CoralSubsystem m_coralSubsystem = new CoralSubsystem();
-  private final ElevatorSubsystem m_elevatorSubsystem = new ElevatorSubsystem();
+  private final Optional<IntakeSubsystem> m_intakeSubsystem;
+  private final Optional<CoralSubsystem> m_coralSubsystem;
+  private final Optional<ElevatorSubsystem> m_elevatorSubsystem;
+  private final Optional<AlgaeSubsystem> m_algaeSubsystem;
 
   // Joysticks
   private final Joystick m_driverJoystick = new Joystick(OperatorConstants.kDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    m_intakeSubsystem = getSubsystem(IntakeSubsystem.class);
+    m_coralSubsystem = getSubsystem(CoralSubsystem.class);
+    m_elevatorSubsystem = getSubsystem(ElevatorSubsystem.class); 
+    m_algaeSubsystem = getSubsystem(AlgaeSubsystem.class); 
+
     // Set up SmartDashboard/Shuffleboard widgets for driver/operator use.
     configureDriverStationControls();
 
     // Configure the trigger bindings
     configureBindings();
+  }
+
+  // Tom wrote this cool template to make the optional subsystem creation code in
+  // the constructor above a lot clearer. This is what clever coding looks like.
+  private <SSC> Optional<SSC> getSubsystem(Class<SSC> subsystemClass) {
+    Optional<SSC> iss;
+    try {
+      iss = Optional.ofNullable(subsystemClass.getDeclaredConstructor().newInstance());
+    } catch (Exception e) {
+      iss = Optional.empty();
+      //TODO Emit a warning to the driver station that the intake subsystem is not present.
+    }
+    return iss;
   }
 
   //
@@ -83,7 +108,45 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    
+
+    // TODO: Currently, the following assumes that we're running simple commands that
+    // don't depend upon more than a single subsystem. It's very likely that we'll have
+    // complex commands that operate one subsystem but need to query state from another
+    // (for example, maybe the intake command has to wait for the elevator to get to a
+    // known position before feeding coral into it). That will require different logic
+    // to make sure that both dependent subsystems are valid before the binding is added.
+
+    if (m_intakeSubsystem.isPresent())
+    {
+      // Bind operator controls related to the coral subsystem only if it is present on
+      // the robot.
+
+      // TODO: Bind intake commands and controls.
+    }
+
+    if (m_coralSubsystem.isPresent())
+    {
+      // Bind operator controls related to the coral subsystem only if it is present on
+      // the robot.
+
+      // TODO: Bind corral commands and controls.
+    }
+
+    if (m_elevatorSubsystem.isPresent())
+    {
+      // Bind operator controls related to the elevator subsystem only if it is present on
+      // the robot.
+
+      // TODO: Bind elevator commands and controls.
+    }
+
+    if (m_algaeSubsystem.isPresent())
+    {
+      // Bind operator controls related to the algae subsystem only if it is present on
+      // the robot.
+
+      // TODO: Bind algae commands and controls.
+    }
   }
 
   /**
