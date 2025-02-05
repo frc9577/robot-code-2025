@@ -8,6 +8,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutonomousDrive;
 import frc.robot.commands.TimedCommand;
+import frc.robot.commands.ZeroElevator;
 import frc.robot.subsystems.AlgaeSubsystem;
 import frc.robot.subsystems.CoralSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -17,10 +18,12 @@ import frc.robot.subsystems.IntakeSubsystem;
 import java.util.Optional;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -42,6 +45,10 @@ public class RobotContainer {
 
   // Joysticks
   private final Joystick m_driverJoystick = new Joystick(OperatorConstants.kDriverControllerPort);
+  private final XboxController m_operatorController = new XboxController(OperatorConstants.kOperatorControllerPort);
+
+  private final JoystickButton m_zeroButton =
+    new JoystickButton(m_operatorController, OperatorConstants.kZeroElevator);
 
   // Keep track of time for SmartDashboard updates.
   static int m_iTickCount = 0;
@@ -142,10 +149,14 @@ public class RobotContainer {
 
     if (m_elevatorSubsystem.isPresent())
     {
+      ElevatorSubsystem elevatorSubsystem = m_elevatorSubsystem.get();
       // Bind operator controls related to the elevator subsystem only if it is present on
       // the robot.
 
       // TODO: Bind elevator commands and controls.
+
+      // TODO: Test this !!
+      m_zeroButton.onTrue(new ZeroElevator(elevatorSubsystem));
     }
 
     if (m_algaeSubsystem.isPresent())
@@ -209,5 +220,16 @@ public class RobotContainer {
     }
 
     m_iTickCount++;
+  }
+
+  // This gets called every system tick for testing.
+  public void periodicTest()
+  {
+    if (m_elevatorSubsystem.isPresent()) {
+      ElevatorSubsystem elevatorSubsystem = m_elevatorSubsystem.get();
+      double operatorRightY = m_operatorController.getRightY();
+      
+      elevatorSubsystem.setMotorSpeed(operatorRightY);
+    }
   }
 }

@@ -58,6 +58,9 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kOperatorControllerPort = 1;
+
+    public static final int kZeroElevator = 4; // Button Y
   }
 
   public static class DrivetrainConstants {
@@ -131,6 +134,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
   public static class ElevatorConstants {
     public static final int kMotorCANID = 60;
+    public static final double kMotorZeroSpeed = 0.1;
 
     public static final int kSensorChannel = 4;
     public static final boolean kSensorFalseIsEmpty = false;

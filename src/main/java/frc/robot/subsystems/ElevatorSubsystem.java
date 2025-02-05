@@ -23,8 +23,13 @@ import frc.robot.Constants.ElevatorConstants;
 public class ElevatorSubsystem extends SubsystemBase {
   private double m_motorSpeed = 0;
 
+  // TODO: change out motors to talonFX
   private final SparkMax m_motor = new SparkMax(ElevatorConstants.kMotorCANID, 
                                                             MotorType.kBrushless);
+
+  private RelativeEncoder m_motorEncoder;
+
+  private boolean m_sensorBroken = false;
 
   // TODO: Consider renaming this. What sensor is this? Temperature, ambient light level,
   // camera or, perhaps, a home position detector :-)
@@ -40,6 +45,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     {
       throw new RuntimeException("Elevator subsystem motor not present");
     }
+
+    m_motorEncoder = m_motor.getEncoder();
   }
 
   public void setMotorSpeed(double speed)
@@ -60,20 +67,25 @@ public class ElevatorSubsystem extends SubsystemBase {
     return ElevatorConstants.kSensorFalseIsEmpty ? sensorRead : !sensorRead;
   }
 
+  // Returns the raw encoder position.
   public double getPosition()
   {
     // TODO: Return the current position of the elevator (in metres above 0?)
-    return 0.0;
+    return m_motorEncoder.getPosition();
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    
-    RelativeEncoder motorEncoder = m_motor.getEncoder();
+    boolean elevatorDown = isElevatorDown();
 
-    if (isElevatorDown() == true) {
-      motorEncoder.setPosition(0.0);
+    if ((elevatorDown == true) && (m_sensorBroken == false)) {
+      m_motorEncoder.setPosition(0.0);
+      m_sensorBroken = true;
+    }
+
+    if ((elevatorDown == false) && (m_sensorBroken == true)) {
+      m_sensorBroken = false;
     }
   }
 
