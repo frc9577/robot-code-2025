@@ -14,8 +14,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import au.grapplerobotics.ConfigurationFailedException;
-import au.grapplerobotics.LaserCan;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -37,7 +35,7 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_leftSpeed  = 0.0;
   private double m_rightSpeed = 0.0;
 
-  private final LaserCan m_laserCan = new LaserCan(DrivetrainConstants.kLaserCanCANID);
+  //private final LaserCan m_laserCan = new LaserCan(DrivetrainConstants.kLaserCanCANID);
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -114,17 +112,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     // Setting up the drive train
     m_Drivetrain = new DifferentialDrive(m_leftMotor::set, m_rightMotor::set);
-    SendableRegistry.setName(m_Drivetrain, "DriveSubsystem", "Drivetrain");
-
-    // Setting up the laserCAN
-    try {
-      m_laserCan.setRangingMode(LaserCan.RangingMode.SHORT);
-      m_laserCan.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_100MS);
-    } catch (ConfigurationFailedException e) {
-      // TODO: Same as above. This isn't a fatal error. Just set a flag indicating that the 
-      // rangefinder isn't available and output a status message to the log. 
-      e.printStackTrace();
-    }    
+    SendableRegistry.setName(m_Drivetrain, "DriveSubsystem", "Drivetrain");    
   }
 
   public void initDefaultCommand(Joystick Joystick, XboxController Controller, boolean isArcade)
@@ -165,22 +153,6 @@ public class DriveSubsystem extends SubsystemBase {
     {
       return m_rightSpeed;
     }
-  }
-
-  // Return the distance between the front of the robot and the object ahead in metres.
-  public double getDistanceReading()
-  {
-    LaserCan.Measurement measurement = m_laserCan.getMeasurement();
-
-    // Was the measurement valid?
-    if ((measurement != null) && (measurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT))
-    {
-      // Yes, return it.
-      return (measurement.distance_mm/1000.0);
-    } 
-
-     // Return a marker to show that no measurement is can be made.
-    return (-1.0);
   }
 
   @Override

@@ -224,7 +224,7 @@ public class RobotContainer {
     // Drive subsystem (always present)
     if((m_iTickCount % Constants.DrivetrainConstants.kTicksPerUpdate) == 0)
     {
-      SmartDashboard.putNumber("LIDAR Distance", m_driveSubsystem.getDistanceReading());
+      
     }
 
     // Coral subsystem state update.
