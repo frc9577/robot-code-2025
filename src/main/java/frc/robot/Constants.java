@@ -134,7 +134,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
   public static class ElevatorConstants {
     public static final int kMotorCANID = 60;
-    public static final double kMotorZeroSpeed = 0.1;
+    public static final double kMotorZeroingSpeed = 0.1;
 
     public static final int kSensorChannel = 4;
     public static final boolean kSensorFalseIsEmpty = false;

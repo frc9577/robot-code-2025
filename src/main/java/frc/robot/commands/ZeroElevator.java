@@ -26,13 +26,13 @@ public class ZeroElevator extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.setMotorSpeed(ElevatorConstants.kMotorZeroSpeed);
+    m_subsystem.setMotorSpeed(ElevatorConstants.kMotorZeroingSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.setMotorSpeed(ElevatorConstants.kMotorZeroSpeed);
+    m_subsystem.setMotorSpeed(ElevatorConstants.kMotorZeroingSpeed);
   }
 
   // Called once the command ends or is interrupted.
@@ -44,10 +44,6 @@ public class ZeroElevator extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (m_subsystem.isElevatorDown() == true) {
-      return true;
-    } else {
-      return false;
-    }
+    return m_subsystem.isElevatorDown();
   }
 }

@@ -7,9 +7,12 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
@@ -23,30 +26,23 @@ import frc.robot.Constants.ElevatorConstants;
 public class ElevatorSubsystem extends SubsystemBase {
   private double m_motorSpeed = 0;
 
-  // TODO: change out motors to talonFX
-  private final SparkMax m_motor = new SparkMax(ElevatorConstants.kMotorCANID, 
-                                                            MotorType.kBrushless);
+  private final TalonFX m_motor = new TalonFX(ElevatorConstants.kMotorCANID);
 
-  private RelativeEncoder m_motorEncoder;
-
+  private final DigitalInput m_LineBreakSensor = new DigitalInput(ElevatorConstants.kSensorChannel);
   private boolean m_sensorBroken = false;
-
-  // TODO: Consider renaming this. What sensor is this? Temperature, ambient light level,
-  // camera or, perhaps, a home position detector :-)
-  private final DigitalInput m_Sensor = new DigitalInput(ElevatorConstants.kSensorChannel);
-
+  
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
     // We need to know if the motor controller we need is
     // actually present on the CAN bus and, unfortunately, the 
     // constructor doesn't seem to throw an exception in this case. 
     // Let's query for firmware error status and use this for now.
-    if (m_motor.getFaults().firmware)
-    {
-      throw new RuntimeException("Elevator subsystem motor not present");
-    }
 
-    m_motorEncoder = m_motor.getEncoder();
+    // TODO: Investigate a version of this for talonFX
+    //if (m_motor.getFaults().firmware)
+    //{
+    //  throw new RuntimeException("Elevator subsystem motor not present");
+    //}
   }
 
   public void setMotorSpeed(double speed)
@@ -63,7 +59,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public boolean isElevatorDown()
   {
-    boolean sensorRead = m_Sensor.get();
+    boolean sensorRead = m_LineBreakSensor.get();
     return ElevatorConstants.kSensorFalseIsEmpty ? sensorRead : !sensorRead;
   }
 
@@ -71,7 +67,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   public double getPosition()
   {
     // TODO: Return the current position of the elevator (in metres above 0?)
-    return m_motorEncoder.getPosition();
+    return m_motor.getPosition().getValueAsDouble();
   }
 
   @Override
@@ -80,7 +76,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     boolean elevatorDown = isElevatorDown();
 
     if ((elevatorDown == true) && (m_sensorBroken == false)) {
-      m_motorEncoder.setPosition(0.0);
+      m_motor.setPosition(0);
       m_sensorBroken = true;
     }
 
