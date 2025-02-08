@@ -5,6 +5,10 @@
 // TODO: Class header comment. What does this class do?
 
 package frc.robot.subsystems;
+import static edu.wpi.first.units.Units.*;
+import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -24,6 +28,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   private final DigitalInput m_LineBreakSensor = new DigitalInput(ElevatorConstants.kSensorChannel);
   private boolean m_sensorBroken = false;
+  private final PositionVoltage m_positionVoltage = new PositionVoltage(0).withSlot(0);
+  private double m_TargetHeight = 0.0;
 
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
@@ -37,6 +43,27 @@ public class ElevatorSubsystem extends SubsystemBase {
     //{
     //  throw new RuntimeException("Elevator subsystem motor not present");
     //}
+
+    TalonFXConfiguration configs = new TalonFXConfiguration();
+    configs.Slot0.kP = ElevatorConstants.kP;
+    configs.Slot0.kI = 0; // No output for integrated error
+    configs.Slot0.kD = 0.1; // A velocity of 1 rps results in 0.1 V output
+    // Peak output of 8 V
+    configs.Voltage.withPeakForwardVoltage(Volts.of(ElevatorConstants.PeakVoltage))
+      .withPeakReverseVoltage(Volts.of(-ElevatorConstants.PeakVoltage));
+
+    /* Retry config apply up to 5 times, report if failure */
+    StatusCode status = StatusCode.StatusCodeNotInitialized;
+    for (int i = 0; i < 5; ++i) {
+      status = m_motor.getConfigurator().apply(configs);
+      if (status.isOK()) break;
+    }
+    if (!status.isOK()) {
+      System.out.println("Could not apply configs, error code: " + status.toString());
+    }
+
+    // Make sure we start at the home position.
+    m_motor.setPosition(0.0);
   }
 
   // This is assuming that postive speeds is moving the elevator up
@@ -63,6 +90,26 @@ public class ElevatorSubsystem extends SubsystemBase {
   {
     boolean sensorRead = m_LineBreakSensor.get();
     return ElevatorConstants.kSensorFalseIsEmpty ? sensorRead : !sensorRead;
+  }
+
+  // Set the target elevator height in metres above the base position.
+  public void setTargetPosition(double height)
+  {
+    m_TargetHeight = height;
+
+    double elevatorPositionRotations = height / ElevatorConstants.kElevatorGearRatio;
+    if (!ElevatorConstants.kPositiveMovesUp)
+    {
+      elevatorPositionRotations = -elevatorPositionRotations;
+    }
+
+    m_motor.setControl(m_positionVoltage.withPosition(elevatorPositionRotations));
+  }
+
+  // Return the current setpoint of the elevator in metres above the base position.
+  public double getTargetPosition()
+  {
+    return m_TargetHeight;
   }
 
   // Returns the height of the elevator from the base.

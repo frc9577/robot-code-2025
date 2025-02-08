@@ -137,9 +137,15 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     public static final double kMotorZeroingSpeed = -0.2;
     public static final boolean kPositiveMovesUp = true;
 
+    public static final double kP = 2.4; // An error of 1 rotation results in 2.4 V output
+    public static final double kI = 0.0;
+    public static final double kD = 0.1; // A velocity of 1 rps results in 0.1 V output
+    public static final double PeakVoltage = 8.0;
+    
     public static final int kSensorChannel = 4;
     public static final boolean kSensorFalseIsEmpty = false;
 
+    // The distance travelled for a single rotation of the Kraken output shaft.
     public static final double kElevatorGearRatio = ((1.0/64.0) * (0.04) * Math.PI);
 
     // SmartDashboard update frequency for elevator subsystem state in 20ms counts.
