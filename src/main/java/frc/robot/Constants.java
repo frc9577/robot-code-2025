@@ -60,7 +60,10 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;
 
-    public static final int kZeroElevator = 4; // Button Y
+    public static final int kZeroElevator = 3; // Button X
+    public static final int kElevatorPositionIntake = 1; // Button A
+    public static final int kElevatorPositionL2 = 2; // Button B
+    public static final int kElevatorPostionL3 = 4; // Button Y
   }
 
   public static class DrivetrainConstants {
@@ -134,7 +137,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
   public static class ElevatorConstants {
     public static final int kMotorCANID = 60;
-    public static final double kMotorZeroingSpeed = -0.2;
+    public static final double kMotorZeroingSpeed = -0.5;
     public static final boolean kPositiveMovesUp = true;
 
     public static final double kP = 1.0;// An error of 1 rotation results in 2.4 V output
@@ -146,6 +149,10 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
     public static final int kSensorChannel = 4;
     public static final boolean kSensorFalseIsEmpty = false;
+
+    public static final double kElevatorIntakePosition = 0.3;
+    public static final double kElevatorL2Position = 0.5;
+    public static final double kElevatorL3Position = 0.8;
 
     // The distance travelled for a single rotation of the Kraken output shaft.
     public static final double kElevatorGearRatio = ((1.0/64.0) * (0.04) * Math.PI);

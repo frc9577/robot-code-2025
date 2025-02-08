@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 /** An example command that uses an example subsystem. */
 public class ElevatorDefaultCommand extends Command {
   private final ElevatorSubsystem m_subsystem;
-  private XboxController m_opperatorController;
+  private XboxController m_operatorController;
 
   /**
    * Creates a new ElevatorDefaultCommand.
@@ -21,7 +21,7 @@ public class ElevatorDefaultCommand extends Command {
    */
   public ElevatorDefaultCommand(ElevatorSubsystem subsystem, XboxController operatorController)  {
     m_subsystem = subsystem;
-    m_opperatorController = operatorController;
+    m_operatorController = operatorController;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_subsystem);
@@ -34,7 +34,16 @@ public class ElevatorDefaultCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double height = -(m_opperatorController.getRightY()*ElevatorConstants.maxElevatorHeight);
+    double joystickY = -m_operatorController.getRightY();
+    double height = m_subsystem.getTargetPosition();
+
+    if (joystickY >= 0.75) {
+      height += 0.001;
+    }
+    if (joystickY <= -0.75) {
+      height -= 0.001;
+    }
+
     height = Math.min(Math.max(height, 0), ElevatorConstants.maxElevatorHeight);
 
     m_subsystem.setTargetPosition(height);

@@ -130,6 +130,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     boolean elevatorDown = isElevatorDown();
 
     if ((elevatorDown == true) && (m_sensorBroken == false)) {
+      setTargetPosition(0.0);
       m_motor.setPosition(0);
       m_sensorBroken = true;
     }

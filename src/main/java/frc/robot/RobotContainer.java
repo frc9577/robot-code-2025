@@ -5,8 +5,10 @@
 package frc.robot;
 
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutonomousDrive;
+import frc.robot.commands.SetElevatorPosition;
 import frc.robot.commands.TimedCommand;
 import frc.robot.commands.ZeroElevator;
 import frc.robot.subsystems.AlgaeSubsystem;
@@ -49,6 +51,13 @@ public class RobotContainer {
 
   private final JoystickButton m_zeroButton =
     new JoystickButton(m_operatorController, OperatorConstants.kZeroElevator);
+  private final JoystickButton m_elevatorIntakePositionButton =
+    new JoystickButton(m_operatorController, OperatorConstants.kElevatorPositionIntake);
+  private final JoystickButton m_elevatorL2PositionButton =
+    new JoystickButton(m_operatorController, OperatorConstants.kElevatorPositionL2);
+  private final JoystickButton m_elevatorL3PositionButton =
+    new JoystickButton(m_operatorController, OperatorConstants.kElevatorPostionL3);
+  
 
   // Keep track of time for SmartDashboard updates.
   static int m_iTickCount = 0;
@@ -156,10 +165,13 @@ public class RobotContainer {
       // Bind operator controls related to the elevator subsystem only if it is present on
       // the robot.
 
-      // TODO: Bind elevator commands and controls.
-
-      // TODO: Test this !!
       m_zeroButton.onTrue(new ZeroElevator(elevatorSubsystem));
+      m_elevatorIntakePositionButton.onTrue(
+        new SetElevatorPosition(elevatorSubsystem, ElevatorConstants.kElevatorIntakePosition));
+      m_elevatorL2PositionButton.onTrue(
+        new SetElevatorPosition(elevatorSubsystem, ElevatorConstants.kElevatorL2Position));
+      m_elevatorL3PositionButton.onTrue(
+        new SetElevatorPosition(elevatorSubsystem, ElevatorConstants.kElevatorL3Position));
     }
 
     if (m_algaeSubsystem.isPresent())
@@ -219,7 +231,7 @@ public class RobotContainer {
       SmartDashboard.putNumber("Elevator Encoder", elevatorSubsystem.getPosition());
       SmartDashboard.putNumber("Elevator Set Point", elevatorSubsystem.getTargetPosition());
       SmartDashboard.putNumber("Elevator Speed", elevatorSubsystem.getMotorSpeed());
-      
+
       SmartDashboard.putBoolean("Elevator Down", elevatorSubsystem.isElevatorDown());
     }
     
