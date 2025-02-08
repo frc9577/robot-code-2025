@@ -57,8 +57,9 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
   }
 
   public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
+    public static final int kDriverJoystickPort = 0;
     public static final int kOperatorControllerPort = 1;
+    public static final int kDriverControllerPort = 2;
 
     public static final int kZeroElevator = 3; // Button X
     public static final int kElevatorPositionIntake = 1; // Button A

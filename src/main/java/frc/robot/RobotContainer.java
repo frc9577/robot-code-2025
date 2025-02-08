@@ -37,6 +37,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // Create SmartDashboard chooser for autonomous routines
   private final SendableChooser<Command> m_autoChooser = new SendableChooser<>();
+  private final SendableChooser<Boolean> m_isArcadeChooser = new SendableChooser<>();
 
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
@@ -46,7 +47,9 @@ public class RobotContainer {
   private final Optional<AlgaeSubsystem> m_algaeSubsystem;
 
   // Joysticks
-  private final Joystick m_driverJoystick = new Joystick(OperatorConstants.kDriverControllerPort);
+  private final Joystick m_driverJoystick = new Joystick(OperatorConstants.kDriverJoystickPort);
+  private final XboxController m_driverController = new XboxController(OperatorConstants.kDriverControllerPort);
+
   private final XboxController m_operatorController = new XboxController(OperatorConstants.kOperatorControllerPort);
 
   private final JoystickButton m_zeroButton =
@@ -117,7 +120,11 @@ public class RobotContainer {
         new TimedCommand(autoDriveLeft, 2000)
       ));
 
+    m_isArcadeChooser.setDefaultOption("Arcade Drive", true);
+    m_isArcadeChooser.addOption("Tank Drive", false);
+
     SmartDashboard.putData(m_autoChooser);
+    SmartDashboard.putData(m_isArcadeChooser);
   }
 
   /**
@@ -200,8 +207,13 @@ public class RobotContainer {
     return m_autoChooser.getSelected();
   }
 
+
   public void setDriveType() {
-    m_driveSubsystem.initDefaultCommand(m_driverJoystick);
+    m_driveSubsystem.initDefaultCommand(
+      m_driverJoystick, 
+      m_driverController, 
+      m_isArcadeChooser.getSelected()
+    );
   }
 
   public void UpdateSmartDashboard()

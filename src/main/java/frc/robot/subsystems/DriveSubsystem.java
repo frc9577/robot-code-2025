@@ -18,10 +18,12 @@ import au.grapplerobotics.ConfigurationFailedException;
 import au.grapplerobotics.LaserCan;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
 import frc.robot.commands.ArcadeDriveCommand;
+import frc.robot.commands.TankDriveCommand;
 
 public class DriveSubsystem extends SubsystemBase {
   private final TalonFX m_rightMotor = new TalonFX(DrivetrainConstants.kRightMotorCANID);
@@ -125,9 +127,13 @@ public class DriveSubsystem extends SubsystemBase {
     }    
   }
 
-  public void initDefaultCommand(Joystick leftJoystick)
+  public void initDefaultCommand(Joystick Joystick, XboxController Controller, boolean isArcade)
   {
-    setDefaultCommand(new ArcadeDriveCommand(this, leftJoystick));
+    if (isArcade == true) {
+      setDefaultCommand(new ArcadeDriveCommand(this, Joystick));
+    } else {
+      setDefaultCommand(new TankDriveCommand(this, Controller));
+    }
   }
 
   // Sets left and right motors to set speeds to support tank drive models.
