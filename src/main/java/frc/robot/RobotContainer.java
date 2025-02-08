@@ -8,6 +8,8 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutonomousDrive;
+import frc.robot.commands.IntakeAlgaeCommand;
+import frc.robot.commands.OutputAlgaeCommand;
 import frc.robot.commands.SetElevatorPosition;
 import frc.robot.commands.TimedCommand;
 import frc.robot.commands.ZeroElevator;
@@ -60,6 +62,11 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, OperatorConstants.kElevatorPositionL2);
   private final JoystickButton m_elevatorL3PositionButton =
     new JoystickButton(m_operatorController, OperatorConstants.kElevatorPostionL3);
+
+  private final JoystickButton m_algaeIntakeButton =
+    new JoystickButton(m_operatorController, OperatorConstants.kAlageIntake);
+  private final JoystickButton m_algaeOutputButton =
+    new JoystickButton(m_operatorController, OperatorConstants.kAlageOutput);
   
 
   // Keep track of time for SmartDashboard updates.
@@ -183,10 +190,12 @@ public class RobotContainer {
 
     if (m_algaeSubsystem.isPresent())
     {
+      AlgaeSubsystem algaeSubsystem = m_algaeSubsystem.get();
       // Bind operator controls related to the algae subsystem only if it is present on
       // the robot.
 
-      // TODO: Bind algae commands and controls.
+      m_algaeIntakeButton.onTrue(new IntakeAlgaeCommand(algaeSubsystem));
+      m_algaeOutputButton.onTrue(new OutputAlgaeCommand(algaeSubsystem));
     }
   }
 

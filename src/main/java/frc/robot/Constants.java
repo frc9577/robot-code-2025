@@ -65,6 +65,13 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     public static final int kElevatorPositionIntake = 1; // Button A
     public static final int kElevatorPositionL2 = 2; // Button B
     public static final int kElevatorPostionL3 = 4; // Button Y
+
+    public static final int kCoralIntake = 6; // Right Bumper
+    public static final int kCoralOuttake = 5; // Left Bumper
+    public static final int kCoralStop = 9; // Left Thumbstick Button
+
+    public static final int kAlageIntake = 8; // START
+    public static final int kAlageOutput = 7; // BACK
   }
 
   public static class DrivetrainConstants {
@@ -124,9 +131,16 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     public static final int kSensorChannel = 3;
     public static final boolean kSensorFalseIsEmpty = false;
 
+    // number of ticks between sensor change and motor stop
+    public static final int kEndIntakeMaxCount = 0; // 0 second(s)
+    public static final int kEndOutputMaxCount = 50; // 1 second(s)
+
     // Temp Values, Needs to be changed when solunoid is set up onto the robot
     public static final int kExtendChannel = 8;
     public static final int kRetractChannel = 7;
+
+    public static final double kIntakeSpeed = 0.3;
+    public static final double kOutputSpeed = -0.3;
 
     public static final DoubleSolenoid.Value kOffState = DoubleSolenoid.Value.kOff;
     public static final DoubleSolenoid.Value kDeployedState = DoubleSolenoid.Value.kForward;
