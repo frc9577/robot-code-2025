@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.ElevatorSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -33,9 +34,10 @@ public class ElevatorDefaultCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // Note: We negate the axis values so that pushing the joystick forwards
-    // results in upward motion
-    m_subsystem.setMotorSpeed(-m_opperatorController.getRightY());
+    double height = -(m_opperatorController.getRightY()*ElevatorConstants.maxElevatorHeight);
+    height = Math.min(Math.max(height, 0), ElevatorConstants.maxElevatorHeight);
+
+    m_subsystem.setTargetPosition(height);
   }
 
   // Called once the command ends or is interrupted.

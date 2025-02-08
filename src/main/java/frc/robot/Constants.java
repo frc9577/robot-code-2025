@@ -137,11 +137,13 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     public static final double kMotorZeroingSpeed = -0.2;
     public static final boolean kPositiveMovesUp = true;
 
-    public static final double kP = 2.4; // An error of 1 rotation results in 2.4 V output
+    public static final double kP = 1.0;// An error of 1 rotation results in 2.4 V output
     public static final double kI = 0.0;
-    public static final double kD = 0.1; // A velocity of 1 rps results in 0.1 V output
-    public static final double PeakVoltage = 8.0;
+    public static final double kD = 0.05; // A velocity of 1 rps results in 0.1 V output
+    public static final double PeakVoltage = 10.0;
     
+    public static final double maxElevatorHeight = 1.2;
+
     public static final int kSensorChannel = 4;
     public static final boolean kSensorFalseIsEmpty = false;
 

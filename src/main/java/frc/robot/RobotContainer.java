@@ -217,8 +217,10 @@ public class RobotContainer {
       ElevatorSubsystem elevatorSubsystem = m_elevatorSubsystem.get();
 
       SmartDashboard.putNumber("Elevator Encoder", elevatorSubsystem.getPosition());
-      SmartDashboard.putBoolean("Elevator Down", elevatorSubsystem.isElevatorDown());
+      SmartDashboard.putNumber("Elevator Set Point", elevatorSubsystem.getTargetPosition());
       SmartDashboard.putNumber("Elevator Speed", elevatorSubsystem.getMotorSpeed());
+      
+      SmartDashboard.putBoolean("Elevator Down", elevatorSubsystem.isElevatorDown());
     }
     
     // Intake subsystem state update.
