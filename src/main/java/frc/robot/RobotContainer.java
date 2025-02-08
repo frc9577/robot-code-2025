@@ -63,6 +63,9 @@ public class RobotContainer {
     // Set up SmartDashboard/Shuffleboard widgets for driver/operator use.
     configureDriverStationControls();
 
+    // Configure the default commands
+    configureDefaultCommands();
+
     // Configure the trigger bindings
     configureBindings();
   }
@@ -168,6 +171,14 @@ public class RobotContainer {
     }
   }
 
+  private void configureDefaultCommands() {
+    if (m_elevatorSubsystem.isPresent()) {
+      ElevatorSubsystem elevatorSubsystem = m_elevatorSubsystem.get();
+      
+      elevatorSubsystem.initDefaultCommand(m_operatorController);;
+    }
+  }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -203,8 +214,11 @@ public class RobotContainer {
     // Elevator subsystem state update.
     if(m_elevatorSubsystem.isPresent() && (m_iTickCount % Constants.ElevatorConstants.kTicksPerUpdate) == 0)
     {
-      SmartDashboard.putNumber("Elevator Encoder", m_elevatorSubsystem.get().getPosition());
-      SmartDashboard.putBoolean("Elevator Down", m_elevatorSubsystem.get().isElevatorDown());
+      ElevatorSubsystem elevatorSubsystem = m_elevatorSubsystem.get();
+
+      SmartDashboard.putNumber("Elevator Encoder", elevatorSubsystem.getPosition());
+      SmartDashboard.putBoolean("Elevator Down", elevatorSubsystem.isElevatorDown());
+      SmartDashboard.putNumber("Elevator Speed", elevatorSubsystem.getMotorSpeed());
     }
     
     // Intake subsystem state update.
@@ -225,11 +239,6 @@ public class RobotContainer {
   // This gets called every system tick for testing.
   public void periodicTest()
   {
-    if (m_elevatorSubsystem.isPresent()) {
-      ElevatorSubsystem elevatorSubsystem = m_elevatorSubsystem.get();
-      double operatorRightY = m_operatorController.getRightY();
-      
-      elevatorSubsystem.setMotorSpeed(operatorRightY);
-    }
+
   }
 }

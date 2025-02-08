@@ -134,10 +134,13 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
   public static class ElevatorConstants {
     public static final int kMotorCANID = 60;
-    public static final double kMotorZeroingSpeed = 0.1;
+    public static final double kMotorZeroingSpeed = -0.2;
+    public static final boolean kPositiveMovesUp = true;
 
     public static final int kSensorChannel = 4;
     public static final boolean kSensorFalseIsEmpty = false;
+
+    public static final double kElevatorGearRatio = ((1.0/64.0) * (0.04) * Math.PI);
 
     // SmartDashboard update frequency for elevator subsystem state in 20ms counts.
     public static final int kTicksPerUpdate = 5;

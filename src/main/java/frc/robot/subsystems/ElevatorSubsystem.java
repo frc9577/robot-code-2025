@@ -5,17 +5,13 @@
 // TODO: Class header comment. What does this class do?
 
 package frc.robot.subsystems;
-
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkMax;
 
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.commands.ElevatorDefaultCommand;
 
 // TODO: This class likely needs to be significantly reworked since we need to be
 // able to control the position of the elevator rather than the speed. We'll likely
@@ -24,13 +20,11 @@ import frc.robot.Constants.ElevatorConstants;
 // etc.
 
 public class ElevatorSubsystem extends SubsystemBase {
-  private double m_motorSpeed = 0;
-
   private final TalonFX m_motor = new TalonFX(ElevatorConstants.kMotorCANID);
 
   private final DigitalInput m_LineBreakSensor = new DigitalInput(ElevatorConstants.kSensorChannel);
   private boolean m_sensorBroken = false;
-  
+
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
     // We need to know if the motor controller we need is
@@ -45,16 +39,24 @@ public class ElevatorSubsystem extends SubsystemBase {
     //}
   }
 
+  // This is assuming that postive speeds is moving the elevator up
   public void setMotorSpeed(double speed)
   {
-    m_motor.set(speed);
-    m_motorSpeed = speed;
+    if (ElevatorConstants.kPositiveMovesUp) {
+      m_motor.set(speed);
+    } else {
+      m_motor.set(-speed);
+    }
   }
   
-  // Returns the last COMMANDED speed
+  // Returns the current speed with postive speeds indicating upward movment
   public double getMotorSpeed()
   {
-    return m_motorSpeed;
+    if (ElevatorConstants.kPositiveMovesUp) {
+      return m_motor.get();
+    } else {
+      return -m_motor.get();
+    }
   }
 
   public boolean isElevatorDown()
@@ -63,11 +65,16 @@ public class ElevatorSubsystem extends SubsystemBase {
     return ElevatorConstants.kSensorFalseIsEmpty ? sensorRead : !sensorRead;
   }
 
-  // Returns the raw encoder position.
+  // Returns the height of the elevator from the base.
   public double getPosition()
   {
-    // TODO: Return the current position of the elevator (in metres above 0?)
-    return m_motor.getPosition().getValueAsDouble();
+    double elevatorPosition = m_motor.getPosition().getValueAsDouble() * ElevatorConstants.kElevatorGearRatio; 
+
+    if (ElevatorConstants.kPositiveMovesUp) {
+      return elevatorPosition;
+    } else {
+      return -elevatorPosition;
+    }
   }
 
   @Override
@@ -83,6 +90,11 @@ public class ElevatorSubsystem extends SubsystemBase {
     if ((elevatorDown == false) && (m_sensorBroken == true)) {
       m_sensorBroken = false;
     }
+  }
+
+  public void initDefaultCommand(XboxController operatorController)
+  {
+    setDefaultCommand(new ElevatorDefaultCommand(this, operatorController));
   }
 
   @Override
