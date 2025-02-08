@@ -38,11 +38,10 @@ public class ElevatorSubsystem extends SubsystemBase {
     // constructor doesn't seem to throw an exception in this case. 
     // Let's query for firmware error status and use this for now.
 
-    // TODO: Investigate a version of this for talonFX
-    //if (m_motor.getFaults().firmware)
-    //{
-    //  throw new RuntimeException("Elevator subsystem motor not present");
-    //}
+    if (m_motor.isConnected() == false)
+    {
+      throw new RuntimeException("Elevator subsystem motor not present");
+    }
 
     TalonFXConfiguration configs = new TalonFXConfiguration();
     configs.Slot0.kP = ElevatorConstants.kP;
