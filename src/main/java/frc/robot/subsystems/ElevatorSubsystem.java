@@ -31,6 +31,15 @@ public class ElevatorSubsystem extends SubsystemBase {
   private final PositionVoltage m_positionVoltage = new PositionVoltage(0).withSlot(0);
   private double m_TargetHeight = 0.0;
 
+  int levelIndex = 0;
+  Double[] levels = {
+    0.0,
+    ElevatorConstants.kElevatorIntakePosition,
+    ElevatorConstants.kElevatorL2Position,
+    ElevatorConstants.kElevatorL3Position,
+    ElevatorConstants.maxElevatorHeight
+  };
+
   /** Creates a new ElevatorSubsystem. */
   public ElevatorSubsystem() {
     // We need to know if the motor controller we need is
@@ -85,6 +94,28 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
   }
 
+  // Get what the controllers level index is set to
+  public int getElevatorLevelIndex() {
+    return levelIndex;
+  }
+
+  // Change what pre-set level the elevator is at.
+  public void changeElevatorLevel(int indexChange) {
+    int newLevelIndex = levelIndex + indexChange;
+    newLevelIndex = Math.min(Math.max(newLevelIndex, 0), (levels.length-1));
+
+    setTargetPosition(levels[newLevelIndex]);
+    levelIndex = newLevelIndex;
+  }
+
+  // Sets what pre-set level the elevator is at.
+  public void setElevatorLevel(int newLevelIndex) {
+    newLevelIndex = Math.min(Math.max(newLevelIndex, 0), (levels.length-1));
+
+    setTargetPosition(levels[newLevelIndex]);
+    levelIndex = newLevelIndex;
+  }
+
   public boolean isElevatorDown()
   {
     boolean sensorRead = m_LineBreakSensor.get();
@@ -131,6 +162,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     if ((elevatorDown == true) && (m_sensorBroken == false)) {
       setTargetPosition(0.0);
       m_motor.setPosition(0);
+      levelIndex = 0;
       m_sensorBroken = true;
     }
 

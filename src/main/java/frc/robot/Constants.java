@@ -62,9 +62,9 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     public static final int kDriverControllerPort = 2;
 
     public static final int kZeroElevator = 3; // Button X
-    public static final int kElevatorPositionIntake = 1; // Button A
-    public static final int kElevatorPositionL2 = 2; // Button B
-    public static final int kElevatorPostionL3 = 4; // Button Y
+    public static final int kDecreeseElevatorLevel = 1; // Button A
+    public static final int kIntakeElevatorPosition = 2; // Button B
+    public static final int kIncreaseElevatorLevel = 4; // Button Y
 
     public static final int kCoralIntake = 6; // Right Bumper
     public static final int kCoralOuttake = 5; // Left Bumper

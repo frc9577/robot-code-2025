@@ -8,9 +8,10 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AutonomousDrive;
+import frc.robot.commands.ChangeElevatorLevel;
 import frc.robot.commands.IntakeAlgaeCommand;
 import frc.robot.commands.OutputAlgaeCommand;
-import frc.robot.commands.SetElevatorPosition;
+import frc.robot.commands.SetElevatorLevel;
 import frc.robot.commands.TimedCommand;
 import frc.robot.commands.ZeroElevator;
 import frc.robot.subsystems.AlgaeSubsystem;
@@ -56,12 +57,12 @@ public class RobotContainer {
 
   private final JoystickButton m_zeroButton =
     new JoystickButton(m_operatorController, OperatorConstants.kZeroElevator);
-  private final JoystickButton m_elevatorIntakePositionButton =
-    new JoystickButton(m_operatorController, OperatorConstants.kElevatorPositionIntake);
-  private final JoystickButton m_elevatorL2PositionButton =
-    new JoystickButton(m_operatorController, OperatorConstants.kElevatorPositionL2);
-  private final JoystickButton m_elevatorL3PositionButton =
-    new JoystickButton(m_operatorController, OperatorConstants.kElevatorPostionL3);
+  private final JoystickButton m_increaseElevatorLevelButton =
+    new JoystickButton(m_operatorController, OperatorConstants.kIncreaseElevatorLevel);
+  private final JoystickButton m_decreeseElevatorlevelButton =
+    new JoystickButton(m_operatorController, OperatorConstants.kDecreeseElevatorLevel);
+  private final JoystickButton m_IntakeElevatorPositionButton =
+    new JoystickButton(m_operatorController, OperatorConstants.kIntakeElevatorPosition);
 
   private final JoystickButton m_algaeIntakeButton =
     new JoystickButton(m_operatorController, OperatorConstants.kAlageIntake);
@@ -180,12 +181,12 @@ public class RobotContainer {
       // the robot.
 
       m_zeroButton.onTrue(new ZeroElevator(elevatorSubsystem));
-      m_elevatorIntakePositionButton.onTrue(
-        new SetElevatorPosition(elevatorSubsystem, ElevatorConstants.kElevatorIntakePosition));
-      m_elevatorL2PositionButton.onTrue(
-        new SetElevatorPosition(elevatorSubsystem, ElevatorConstants.kElevatorL2Position));
-      m_elevatorL3PositionButton.onTrue(
-        new SetElevatorPosition(elevatorSubsystem, ElevatorConstants.kElevatorL3Position));
+      m_increaseElevatorLevelButton.onTrue(
+        new ChangeElevatorLevel(elevatorSubsystem, 1));
+      m_decreeseElevatorlevelButton.onTrue(
+        new ChangeElevatorLevel(elevatorSubsystem, -1));
+      m_IntakeElevatorPositionButton.onTrue(
+        new SetElevatorLevel(elevatorSubsystem, 1));
     }
 
     if (m_algaeSubsystem.isPresent())
@@ -252,6 +253,7 @@ public class RobotContainer {
       SmartDashboard.putNumber("Elevator Encoder", elevatorSubsystem.getPosition());
       SmartDashboard.putNumber("Elevator Set Point", elevatorSubsystem.getTargetPosition());
       SmartDashboard.putNumber("Elevator Speed", elevatorSubsystem.getMotorSpeed());
+      SmartDashboard.putNumber("Elevator Level Index", elevatorSubsystem.getElevatorLevelIndex());
 
       SmartDashboard.putBoolean("Elevator Down", elevatorSubsystem.isElevatorDown());
     }

@@ -3,9 +3,9 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorSubsystem;
 
-public class SetElevatorPosition extends Command{
+public class SetElevatorLevel extends Command{
     private final ElevatorSubsystem m_subsystem;
-    private double m_setPoint;
+    private int m_setIndex;
 
 
     /**
@@ -13,10 +13,10 @@ public class SetElevatorPosition extends Command{
      *
      * @param subsystem The subsystem used by this command.
      */
-    public SetElevatorPosition(ElevatorSubsystem subsystem, double setPoint) 
+    public SetElevatorLevel(ElevatorSubsystem subsystem, int setIndex) 
     {
         m_subsystem = subsystem;
-        m_setPoint = setPoint;
+        m_setIndex = setIndex;
 
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(m_subsystem);
@@ -25,7 +25,7 @@ public class SetElevatorPosition extends Command{
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        m_subsystem.setTargetPosition(m_setPoint);
+        m_subsystem.setElevatorLevel(m_setIndex);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
