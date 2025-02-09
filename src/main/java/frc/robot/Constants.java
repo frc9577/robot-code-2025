@@ -52,6 +52,8 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
  public final class Constants {
   public static class RobotConstants {
+    public static final int kpnuematicsTicksPerUpdate = 5;
+
     public static final double minPnuematicsPressure = 80.0;
     public static final double maxPnuematicsPressure = 120.0;
   }
@@ -136,8 +138,8 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     public static final int kEndOutputMaxCount = 50; // 1 second(s)
 
     // Temp Values, Needs to be changed when solunoid is set up onto the robot
-    public static final int kExtendChannel = 8;
-    public static final int kRetractChannel = 7;
+    public static final int kExtendChannel = 15;
+    public static final int kRetractChannel = 0;
 
     public static final double kIntakeSpeed = 0.3;
     public static final double kOutputSpeed = -0.3;

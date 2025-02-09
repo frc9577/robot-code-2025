@@ -5,8 +5,8 @@
 package frc.robot;
 
 import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.RobotConstants;
 import frc.robot.commands.AutonomousDrive;
 import frc.robot.commands.ChangeElevatorLevel;
 import frc.robot.commands.IntakeAlgaeCommand;
@@ -23,6 +23,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import java.util.Optional;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -41,6 +42,8 @@ public class RobotContainer {
   // Create SmartDashboard chooser for autonomous routines
   private final SendableChooser<Command> m_autoChooser = new SendableChooser<>();
   private final SendableChooser<Boolean> m_isArcadeChooser = new SendableChooser<>();
+
+  private final PneumaticHub   m_pnuematicHub   = new PneumaticHub();
 
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_driveSubsystem = new DriveSubsystem();
@@ -75,6 +78,8 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    m_pnuematicHub.enableCompressorAnalog(RobotConstants.minPnuematicsPressure, RobotConstants.maxPnuematicsPressure);
+
     m_intakeSubsystem = getSubsystem(IntakeSubsystem.class);
     m_coralSubsystem = getSubsystem(CoralSubsystem.class);
     m_elevatorSubsystem = getSubsystem(ElevatorSubsystem.class); 
@@ -235,6 +240,11 @@ public class RobotContainer {
     if((m_iTickCount % Constants.DrivetrainConstants.kTicksPerUpdate) == 0)
     {
       
+    }
+
+    if((m_iTickCount % Constants.RobotConstants.kpnuematicsTicksPerUpdate) == 0) {
+      SmartDashboard.putNumber("Pressure", m_pnuematicHub.getPressure(0));
+      SmartDashboard.putBoolean("Compressor Running", m_pnuematicHub.getCompressor());
     }
 
     // Coral subsystem state update.

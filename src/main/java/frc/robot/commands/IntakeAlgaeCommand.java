@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 /** An example command that uses an example subsystem. */
 public class IntakeAlgaeCommand extends Command {
   private final AlgaeSubsystem m_subsystem;
-  private int m_endCounter = 0;
+  private int m_endCounter = -1;
 
   /**
    * Creates a new ExampleCommand.
@@ -31,7 +31,7 @@ public class IntakeAlgaeCommand extends Command {
   public void initialize() {
     m_subsystem.setIntakeSpeed(AlgaeConstants.kIntakeSpeed);
     m_subsystem.setPosition(AlgaeSubsystem.State.DEPLOYED);
-    m_endCounter = 0;
+    m_endCounter = -1;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
