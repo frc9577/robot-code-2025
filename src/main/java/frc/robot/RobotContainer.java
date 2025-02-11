@@ -188,7 +188,7 @@ public class RobotContainer {
 
       m_coralIntakeButton.onTrue(new CoralIntakeCommand(coralSubsystem));
       m_coralOutputButton.onTrue(new CoralOutputCommand(coralSubsystem));
-      
+
       m_coralStopMotorsButton.onTrue(
         new CoralSpeedCommand(coralSubsystem, 0, 0));
     }
@@ -205,7 +205,7 @@ public class RobotContainer {
       m_decreeseElevatorlevelButton.onTrue(
         new ChangeElevatorLevel(elevatorSubsystem, -1));
       m_IntakeElevatorPositionButton.onTrue(
-        new SetElevatorLevel(elevatorSubsystem, 1));
+        new SetElevatorLevel(elevatorSubsystem, 0));
     }
 
     if (m_algaeSubsystem.isPresent())
@@ -256,11 +256,6 @@ public class RobotContainer {
       
     }
 
-    if((m_iTickCount % Constants.RobotConstants.kpnuematicsTicksPerUpdate) == 0) {
-      SmartDashboard.putNumber("Pressure", m_pnuematicHub.getPressure(0));
-      SmartDashboard.putBoolean("Compressor Running", m_pnuematicHub.getCompressor());
-    }
-
     // Coral subsystem state update.
     if(m_coralSubsystem.isPresent() && (m_iTickCount % Constants.CoralConstants.kTicksPerUpdate) == 0)
     {
@@ -289,6 +284,9 @@ public class RobotContainer {
     // Algae subsystem state update.
     if(m_algaeSubsystem.isPresent() && (m_iTickCount % Constants.AlgaeConstants.kTicksPerUpdate) == 0)
     {
+      SmartDashboard.putNumber("Pressure", m_pnuematicHub.getPressure(0));
+      SmartDashboard.putBoolean("Compressor Running", m_pnuematicHub.getCompressor());
+
       SmartDashboard.putBoolean("Has Algae", m_algaeSubsystem.get().hasAlgae());
     }
 

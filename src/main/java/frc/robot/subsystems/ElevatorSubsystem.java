@@ -33,7 +33,6 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   int levelIndex = 0;
   Double[] levels = {
-    0.0,
     ElevatorConstants.kElevatorIntakePosition,
     ElevatorConstants.kElevatorL2Position,
     ElevatorConstants.kElevatorL3Position,

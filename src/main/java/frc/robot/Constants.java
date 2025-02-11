@@ -168,7 +168,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     public static final int kSensorChannel = 4;
     public static final boolean kSensorFalseIsEmpty = false;
 
-    public static final double kElevatorIntakePosition = 0.3;
+    public static final double kElevatorIntakePosition = 0.0;
     public static final double kElevatorL2Position = 0.5;
     public static final double kElevatorL3Position = 0.8;
 

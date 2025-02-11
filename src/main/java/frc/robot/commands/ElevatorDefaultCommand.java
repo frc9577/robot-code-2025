@@ -44,7 +44,13 @@ public class ElevatorDefaultCommand extends Command {
       height -= 0.001;
     }
 
-    height = Math.min(Math.max(height, 0), ElevatorConstants.maxElevatorHeight);
+    // Allows the operator to set the elevator into negitaive setpoints
+    // when the elevator zero switch is not on incase of setpoint drift.
+    if (m_subsystem.isElevatorDown() == true) {
+      height = Math.min(Math.max(height, 0), ElevatorConstants.maxElevatorHeight);
+    } else {
+      height = Math.min(height, ElevatorConstants.maxElevatorHeight);
+    }
 
     m_subsystem.setTargetPosition(height);
   }
