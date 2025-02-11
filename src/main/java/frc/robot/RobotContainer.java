@@ -9,6 +9,9 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.commands.AutonomousDrive;
 import frc.robot.commands.ChangeElevatorLevel;
+import frc.robot.commands.CoralIntakeCommand;
+import frc.robot.commands.CoralOutputCommand;
+import frc.robot.commands.CoralSpeedCommand;
 import frc.robot.commands.IntakeAlgaeCommand;
 import frc.robot.commands.OutputAlgaeCommand;
 import frc.robot.commands.SetElevatorLevel;
@@ -72,6 +75,12 @@ public class RobotContainer {
   private final JoystickButton m_algaeOutputButton =
     new JoystickButton(m_operatorController, OperatorConstants.kAlageOutput);
   
+  private final JoystickButton m_coralIntakeButton = 
+    new JoystickButton(m_operatorController, OperatorConstants.kCoralIntake);
+  private final JoystickButton m_coralOutputButton =
+    new JoystickButton(m_operatorController, OperatorConstants.kCoralOuttake);
+  private final JoystickButton m_coralStopMotorsButton =
+    new JoystickButton(m_operatorController, OperatorConstants.kCoralStop);
 
   // Keep track of time for SmartDashboard updates.
   static int m_iTickCount = 0;
@@ -173,10 +182,15 @@ public class RobotContainer {
 
     if (m_coralSubsystem.isPresent())
     {
+      CoralSubsystem coralSubsystem = m_coralSubsystem.get();
       // Bind operator controls related to the coral subsystem only if it is present on
       // the robot.
 
-      // TODO: Bind corral commands and controls.
+      m_coralIntakeButton.onTrue(new CoralIntakeCommand(coralSubsystem));
+      m_coralOutputButton.onTrue(new CoralOutputCommand(coralSubsystem));
+      
+      m_coralStopMotorsButton.onTrue(
+        new CoralSpeedCommand(coralSubsystem, 0, 0));
     }
 
     if (m_elevatorSubsystem.isPresent())
@@ -251,8 +265,6 @@ public class RobotContainer {
     if(m_coralSubsystem.isPresent() && (m_iTickCount % Constants.CoralConstants.kTicksPerUpdate) == 0)
     {
       SmartDashboard.putBoolean("Has Coral", m_coralSubsystem.get().hasCoral());
-      SmartDashboard.putBoolean("Coral Front", m_coralSubsystem.get().detectsCoralAtFront());
-      SmartDashboard.putBoolean("Coral Back", m_coralSubsystem.get().detectsCoralAtBack());
     }
 
     // Elevator subsystem state update.

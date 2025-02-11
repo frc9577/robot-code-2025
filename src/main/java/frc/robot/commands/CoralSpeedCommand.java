@@ -30,15 +30,14 @@ public class CoralSpeedCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.setIntakeSpeed(0);
-    m_subsystem.setOutputSpeed(0);
+    m_subsystem.setIntakeSpeed(m_intakeSpeed);
+    m_subsystem.setOutputSpeed(m_outputSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.setIntakeSpeed(m_intakeSpeed);
-    m_subsystem.setOutputSpeed(m_outputSpeed);
+
   }
 
   // Called once the command ends or is interrupted.

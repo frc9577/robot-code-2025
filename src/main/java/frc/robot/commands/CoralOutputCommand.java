@@ -4,14 +4,13 @@
 
 package frc.robot.commands;
 
-import frc.robot.Constants.AlgaeConstants;
-import frc.robot.subsystems.AlgaeSubsystem;
-
+import frc.robot.Constants.CoralConstants;
+import frc.robot.subsystems.CoralSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class OutputAlgaeCommand extends Command {
-  private final AlgaeSubsystem m_subsystem;
+public class CoralOutputCommand extends Command {
+  private final CoralSubsystem m_subsystem;
   private int m_endCounter = -1;
 
   /**
@@ -19,7 +18,7 @@ public class OutputAlgaeCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public OutputAlgaeCommand(AlgaeSubsystem subsystem) {
+  public CoralOutputCommand(CoralSubsystem subsystem) {
     m_subsystem = subsystem;
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -29,8 +28,9 @@ public class OutputAlgaeCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.setIntakeSpeed(AlgaeConstants.kOutputSpeed);
-    m_subsystem.setPosition(AlgaeSubsystem.State.RETRACTED);
+    m_subsystem.setIntakeSpeed(CoralConstants.kMotorIntakeSpeed);
+    m_subsystem.setOutputSpeed(CoralConstants.kMotorOutputSpeed);
+
     m_endCounter = -1;
   }
 
@@ -44,16 +44,16 @@ public class OutputAlgaeCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     m_subsystem.setIntakeSpeed(0.0);
-    m_subsystem.setPosition(AlgaeSubsystem.State.RETRACTED);
+    m_subsystem.setOutputSpeed(0.0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (m_subsystem.hasAlgae() == false) {
+    if (m_subsystem.hasCoral() == true) {
         m_endCounter++;
     }
 
-    return (m_endCounter >= AlgaeConstants.kEndOutputMaxCount);
+    return (m_endCounter >= CoralConstants.kEndIntakeMaxCount);
   }
 }

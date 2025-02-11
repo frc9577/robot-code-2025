@@ -111,15 +111,16 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     public static final int kIntakeMotorCANID = 40;
     public static final int kOutputMotorCANID = 41;
 
-    // Light break sensor indicating that a coral is visible at the
-    // front (output) side of the coral handler.
-    public static final int kFrontSensorChannel = 0;
-    public static final boolean kFrontSensorFalseIsEmpty = false;
+    public static final double kMotorIntakeSpeed = 0.3;
+    public static final double kMotorOutputSpeed = -0.3;
 
-    // Light break sensor indicating that a coral is visible at the
-    // back (input) side of the coral handler.
-    public static final int kBackSensorChannel = 1;
-    public static final boolean kBackSensorFalseIsEmpty = false;
+    // number of ticks between sensor change and motor stop
+    public static final int kEndIntakeMaxCount = 25; // 0.5 second(s)
+    public static final int kEndOutputMaxCount = 50; // 1 second(s)
+
+    // Line Break? sensor to detect coral in the middle
+    public static final int kSensorChannel = 0;
+    public static final boolean kSensorFalseIsEmpty = false;
 
     // SmartDashboard update frequency for coral subsystem state in 20ms counts.
     public static final int kTicksPerUpdate = 10;
@@ -142,7 +143,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     public static final int kRetractChannel = 0;
 
     public static final double kIntakeSpeed = 0.3;
-    public static final double kOutputSpeed = -0.3;
+    public static final double kOutputSpeed = 0.3;
 
     public static final DoubleSolenoid.Value kOffState = DoubleSolenoid.Value.kOff;
     public static final DoubleSolenoid.Value kDeployedState = DoubleSolenoid.Value.kForward;

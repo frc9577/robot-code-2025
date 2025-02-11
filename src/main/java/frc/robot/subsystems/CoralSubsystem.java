@@ -24,8 +24,8 @@ public class CoralSubsystem extends SubsystemBase {
   private final SparkMax m_outputMotor = new SparkMax(CoralConstants.kOutputMotorCANID,
                                                       MotorType.kBrushless);
 
-  private final DigitalInput m_FrontSensor = new DigitalInput(CoralConstants.kFrontSensorChannel);
-  private final DigitalInput m_BackSensor = new DigitalInput(CoralConstants.kBackSensorChannel);
+  // might not be a line break
+  private final DigitalInput m_LineBreakSensor = new DigitalInput(CoralConstants.kSensorChannel);
 
   /** Creates a new CoralSubsystem. */
   public CoralSubsystem() {
@@ -63,21 +63,10 @@ public class CoralSubsystem extends SubsystemBase {
     return m_outputSpeed;
   }
 
-  public boolean detectsCoralAtFront()
-  {
-    boolean sensorRead = m_FrontSensor.get();
-    return CoralConstants.kFrontSensorFalseIsEmpty ? sensorRead : !sensorRead;
-  }
-  
-  public boolean detectsCoralAtBack()
-  {
-    boolean sensorRead = m_BackSensor.get();
-    return CoralConstants.kBackSensorFalseIsEmpty ? sensorRead : !sensorRead;
-  }
-
   public boolean hasCoral()
   {
-    return (detectsCoralAtFront() || detectsCoralAtBack());
+    boolean sensorRead = m_LineBreakSensor.get();
+    return CoralConstants.kSensorFalseIsEmpty ? sensorRead : !sensorRead;
   }
 
   @Override
