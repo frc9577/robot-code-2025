@@ -8,8 +8,10 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -23,6 +25,9 @@ import frc.robot.Constants.*;
 import frc.robot.commands.ArcadeDriveCommand;
 import frc.robot.commands.TankDriveCommand;
 
+import com.studica.frc.AHRS;
+import com.studica.frc.AHRS.NavXComType;
+
 public class DriveSubsystem extends SubsystemBase {
   private final TalonFX m_rightMotor = new TalonFX(DrivetrainConstants.kRightMotorCANID);
   private TalonFX m_optionalRightMotor;
@@ -35,17 +40,29 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_leftSpeed  = 0.0;
   private double m_rightSpeed = 0.0;
 
-  //private final LaserCan m_laserCan = new LaserCan(DrivetrainConstants.kLaserCanCANID);
+  private final PositionVoltage m_positionVoltage = new PositionVoltage(0).withSlot(0);
 
+  private double m_leftTargetPosition = 0.0;
+  private double m_rightTargetPosition = 0.0;
+
+  //The gyro sensor
+  private final AHRS m_gyro = new AHRS(NavXComType.kMXP_SPI);
+  
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-    // Right Motor Setup
-    final MotorOutputConfigs m_rightMotorOutputConfigs = new MotorOutputConfigs();
-    m_rightMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive; // why is it a enum :sob:
-    m_rightMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
+    TalonFXConfiguration autoConfig = new TalonFXConfiguration();
+    autoConfig.Slot0.kP = DrivetrainConstants.kP;
+    autoConfig.Slot0.kI = DrivetrainConstants.kI; // No output for integrated error
+    autoConfig.Slot0.kD = DrivetrainConstants.kD; // A velocity of 1 rps results in 0.1 V output
 
-    final TalonFXConfigurator m_rightMotorConfigurator = m_rightMotor.getConfigurator();
-    m_rightMotorConfigurator.apply(m_rightMotorOutputConfigs);
+    // Right Motor Setup
+    final MotorOutputConfigs rightMotorOutputConfigs = new MotorOutputConfigs();
+    rightMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive; // why is it a enum :sob:
+    rightMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
+
+    final TalonFXConfigurator rightMotorConfigurator = m_rightMotor.getConfigurator();
+    rightMotorConfigurator.apply(rightMotorOutputConfigs);
+    rightMotorConfigurator.apply(autoConfig); // i hope it wont overwrite above config
     SendableRegistry.setName(m_rightMotor, "DriveSubsystem", "rightMotor");
 
     // Optional Right Motor
@@ -53,13 +70,14 @@ public class DriveSubsystem extends SubsystemBase {
       m_optionalRightMotor = new TalonFX(DrivetrainConstants.kOptionalRightMotorCANID);
 
       // Setting up Config
-      final MotorOutputConfigs m_rightOptionalMotorOutputConfigs = new MotorOutputConfigs();
-      m_rightOptionalMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;
-      m_rightOptionalMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
+      final MotorOutputConfigs rightOptionalMotorOutputConfigs = new MotorOutputConfigs();
+      rightOptionalMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;
+      rightOptionalMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
   
       // Saving Config
-      final TalonFXConfigurator m_rightOptionalMotorConfigurator = m_optionalRightMotor.getConfigurator();
-      m_rightOptionalMotorConfigurator.apply(m_rightOptionalMotorOutputConfigs);
+      final TalonFXConfigurator rightOptionalMotorConfigurator = m_optionalRightMotor.getConfigurator();
+      rightOptionalMotorConfigurator.apply(rightOptionalMotorOutputConfigs);
+      rightOptionalMotorConfigurator.apply(autoConfig); // i hope it wont overwrite above config
 
       // Setting as a follwer
       m_optionalRightMotor.setControl(
@@ -72,11 +90,12 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     // Left Motor Setup
-    final MotorOutputConfigs m_leftMotorOutputConfigs = new MotorOutputConfigs();
-    m_leftMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
+    final MotorOutputConfigs leftMotorOutputConfigs = new MotorOutputConfigs();
+    leftMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
 
-    final TalonFXConfigurator m_leftMotorConfigurator = m_leftMotor.getConfigurator();
-    m_leftMotorConfigurator.apply(m_leftMotorOutputConfigs);
+    final TalonFXConfigurator leftMotorConfigurator = m_leftMotor.getConfigurator();
+    leftMotorConfigurator.apply(leftMotorOutputConfigs);
+    leftMotorConfigurator.apply(autoConfig); // i hope it wont overwrite above config
     SendableRegistry.setName(m_leftMotor, "DriveSubsystem", "leftMotor");
 
     // Optional Left Motor
@@ -84,13 +103,14 @@ public class DriveSubsystem extends SubsystemBase {
       m_optionalLeftMotor = new TalonFX(DrivetrainConstants.kOptionalLeftMotorCANID);
 
       // Setting up config
-      final MotorOutputConfigs m_leftOptionalMotorOutputConfigs = new MotorOutputConfigs();
-      m_leftOptionalMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;
-      m_leftOptionalMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
+      final MotorOutputConfigs leftOptionalMotorOutputConfigs = new MotorOutputConfigs();
+      leftOptionalMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;
+      leftOptionalMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
   
       // Saving config
-      final TalonFXConfigurator m_leftOptionalMotorConfigurator = m_optionalLeftMotor.getConfigurator();
-      m_leftOptionalMotorConfigurator.apply(m_leftOptionalMotorOutputConfigs);
+      final TalonFXConfigurator leftOptionalMotorConfigurator = m_optionalLeftMotor.getConfigurator();
+      leftOptionalMotorConfigurator.apply(leftOptionalMotorOutputConfigs);
+      leftOptionalMotorConfigurator.apply(autoConfig); // i hope it wont overwrite above config
 
       // Setting as follower
       m_optionalLeftMotor.setControl(
@@ -110,9 +130,13 @@ public class DriveSubsystem extends SubsystemBase {
       e.printStackTrace();
     }
 
+    // Zeroing the encoders
+    m_leftMotor.setPosition(0);
+    m_rightMotor.setPosition(0);
+
     // Setting up the drive train
     m_Drivetrain = new DifferentialDrive(m_leftMotor::set, m_rightMotor::set);
-    SendableRegistry.setName(m_Drivetrain, "DriveSubsystem", "Drivetrain");    
+    SendableRegistry.setName(m_Drivetrain, "DriveSubsystem", "Drivetrain");  
   }
 
   public void initDefaultCommand(Joystick Joystick, XboxController Controller, boolean isArcade)
@@ -153,6 +177,85 @@ public class DriveSubsystem extends SubsystemBase {
     {
       return m_rightSpeed;
     }
+  }
+
+  // For Auto, sets the left motors TARGET position
+  public void setLeftTargetPosition(double position)
+  {
+    m_leftTargetPosition = position;
+
+    double leftPositionRotations = position / DrivetrainConstants.kDrivetrainGearRatio;
+    if (!DrivetrainConstants.kLeftPositiveMovesForward) {
+      leftPositionRotations = -leftPositionRotations;
+    }
+
+    m_leftMotor.setPosition(0); // zero's motor at the start of the movement
+    m_leftMotor.setControl(m_positionVoltage.withPosition(leftPositionRotations));
+  }
+
+  // For Auto, returns the left motors TARGET position
+  public double getLeftTargetPosition()
+  {
+    return m_leftTargetPosition;
+  }
+
+  // For Auto, returns the left motors CURRENT position
+  public double getLeftPosition()
+  {
+    double leftMotorPosition = m_leftMotor.getPosition().getValueAsDouble() * DrivetrainConstants.kDrivetrainGearRatio;
+
+    if (DrivetrainConstants.kLeftPositiveMovesForward) {
+      return leftMotorPosition;
+    } else {
+      return -leftMotorPosition;
+    }
+  }
+
+  // For Auto, sets the right motors TARGET position
+  public void setRightTargetPosition(double position)
+  {
+    m_rightTargetPosition = position;
+
+    double rightPositionRotations = position / DrivetrainConstants.kDrivetrainGearRatio;
+    if (!DrivetrainConstants.kRightPositiveMovesForward) {
+      rightPositionRotations = -rightPositionRotations;
+    }
+
+    m_rightMotor.setPosition(0); // zero's motor at the start of the movement
+    m_rightMotor.setControl(m_positionVoltage.withPosition(rightPositionRotations));
+  }
+
+  // For Auto, returns the right motors TARGET position
+  public double getRightTargetPosition()
+  {
+    return m_rightTargetPosition;
+  }
+
+  // For Auto, returns the right motors CURRENT position
+  public double getRightPosition()
+  {
+    double rightMotorPosition = m_rightMotor.getPosition().getValueAsDouble() * DrivetrainConstants.kDrivetrainGearRatio;
+
+    if (DrivetrainConstants.kRightPositiveMovesForward) {
+      return rightMotorPosition;
+    } else {
+      return -rightMotorPosition;
+    }
+  }
+
+  // For Auto, returns if the left and right motor are within tolerance of the PID target
+  public boolean isAtTarget(double tolerance) 
+  {
+    double leftError = Math.abs(m_leftTargetPosition - getLeftPosition());
+    double rightError = Math.abs(m_rightTargetPosition - getRightPosition());
+
+    return (leftError <= tolerance) && (rightError <= tolerance);
+  }
+
+  // For Auto, needs to be in an auto command execute, so we can use the PID without 
+  // differential drive timeing out.
+  public void callDrivetrainFeed() {
+    m_Drivetrain.feed();
   }
 
   @Override

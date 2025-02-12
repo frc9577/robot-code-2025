@@ -31,7 +31,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
  //   11 - Drive left follower
  //   20 - Drive right primary
  //   21 - Drive right follower
- //   30 - LaserCAN
  //   40 - Coral handler input side motor  
  //   41 - Coral handler output side motor
  //   50 - Algae handler motor
@@ -86,7 +85,18 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     public static final double kTurnDivider = 1.0;
     public static final double kSpeedDivider = 1.0;
 
-    public static final int kLaserCanCANID = 30;
+    // Auto PID stuff
+    public static final double kP = 0.01;// An error of 1 rotation results in 2.4 V output
+    public static final double kI = 0.0;
+    public static final double kD = 0.1; // A velocity of 1 rps results in 0.1 V output
+    public static final double PeakVoltage = 10.0;
+
+    public static boolean kLeftPositiveMovesForward = true;
+    public static boolean kRightPositiveMovesForward = true;
+
+    // The distance travelled for a single rotation of the Kraken output shaft.
+    // TODO: Need to update this !! (ask for help)
+    public static final double kDrivetrainGearRatio = 8.46;
 
     // SmartDashboard update frequency for drive subsystem state in 20ms counts.
     public static final int kTicksPerUpdate = 5;
@@ -159,8 +169,8 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     public static final boolean kPositiveMovesUp = true;
 
     public static final double kP = 1.0;// An error of 1 rotation results in 2.4 V output
-    public static final double kI = 0.0;
-    public static final double kD = 0.05; // A velocity of 1 rps results in 0.1 V output
+    public static final double kI = 0.0; // No output for integrated error
+    public static final double kD = 0.1; // A velocity of 1 rps results in 0.1 V output
     public static final double PeakVoltage = 10.0;
     
     public static final double maxElevatorHeight = 1.2;

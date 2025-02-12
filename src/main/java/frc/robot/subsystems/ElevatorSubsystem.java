@@ -53,9 +53,9 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     TalonFXConfiguration configs = new TalonFXConfiguration();
     configs.Slot0.kP = ElevatorConstants.kP;
-    configs.Slot0.kI = 0; // No output for integrated error
-    configs.Slot0.kD = 0.1; // A velocity of 1 rps results in 0.1 V output
-    // Peak output of 8 V
+    configs.Slot0.kI = ElevatorConstants.kI; // No output for integrated error
+    configs.Slot0.kD = ElevatorConstants.kD; // A velocity of 1 rps results in 0.1 V output
+    
     configs.Voltage.withPeakForwardVoltage(Volts.of(ElevatorConstants.PeakVoltage))
       .withPeakReverseVoltage(Volts.of(-ElevatorConstants.PeakVoltage));
 

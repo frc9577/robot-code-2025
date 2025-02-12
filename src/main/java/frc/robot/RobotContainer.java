@@ -8,6 +8,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.commands.AutonomousDrive;
+import frc.robot.commands.AutonomousDrivePID;
 import frc.robot.commands.ChangeElevatorLevel;
 import frc.robot.commands.CoralIntakeCommand;
 import frc.robot.commands.CoralOutputCommand;
@@ -122,25 +123,31 @@ public class RobotContainer {
   //
   private void configureDriverStationControls()
   {
-    // Drive Forward
+    // Drive Forward (time)
     AutonomousDrive autoDriveForward = new AutonomousDrive(m_driveSubsystem, 
       AutoConstants.kPassLineSpeed, AutoConstants.kPassLineSpeed);
 
-    // Turn Left
+    // Turn Left (time)
     AutonomousDrive autoDriveLeft = new AutonomousDrive(m_driveSubsystem, 
       AutoConstants.kTurnInnerSpeed, AutoConstants.kPassLineSpeed);
 
+    // Drive Forward 2 meter (PID)
+    AutonomousDrivePID autoDrive2MeterPID = new AutonomousDrivePID(m_driveSubsystem, 
+    2, 2, 0.5);
+
     // Drop-down chooser for auto program.
-    m_autoChooser.setDefaultOption("Drive Forward 2 Seconds", 
+    m_autoChooser.setDefaultOption("(TIME) Drive Forward 2 Seconds", 
       new TimedCommand(autoDriveForward, 2000));
     
-    m_autoChooser.addOption("Turn left 2 Seconds", 
+    m_autoChooser.addOption("(TIME) Turn left 2 Seconds", 
       new TimedCommand(autoDriveLeft, 2000));
     
-    m_autoChooser.addOption("Drive forward 2 seconds then turn left 2 Seconds", 
+    m_autoChooser.addOption("(TIME) Drive forward 2 seconds then turn left 2 Seconds", 
       new TimedCommand(autoDriveForward, 2000).andThen(
         new TimedCommand(autoDriveLeft, 2000)
       ));
+
+    m_autoChooser.addOption("(PID) Drive forward 2 meters", autoDrive2MeterPID);
 
     m_isArcadeChooser.setDefaultOption("Arcade Drive", true);
     m_isArcadeChooser.addOption("Tank Drive", false);
@@ -253,7 +260,13 @@ public class RobotContainer {
     // Drive subsystem (always present)
     if((m_iTickCount % Constants.DrivetrainConstants.kTicksPerUpdate) == 0)
     {
-      
+      SmartDashboard.putNumber("Left Encoder", m_driveSubsystem.getLeftPosition());
+      SmartDashboard.putNumber("Left Target", m_driveSubsystem.getLeftTargetPosition());
+      SmartDashboard.putNumber("Left Speed", m_driveSubsystem.getSpeed(true));
+
+      SmartDashboard.putNumber("Right Encoder", m_driveSubsystem.getRightPosition());
+      SmartDashboard.putNumber("Right Target", m_driveSubsystem.getRightTargetPosition());
+      SmartDashboard.putNumber("Right Speed", m_driveSubsystem.getSpeed(false));
     }
 
     // Coral subsystem state update.
