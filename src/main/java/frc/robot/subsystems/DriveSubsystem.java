@@ -213,6 +213,9 @@ public class DriveSubsystem extends SubsystemBase {
     // Setting up the drive train
     m_Drivetrain = new DifferentialDrive(m_leftMotor::set, m_rightMotor::set);
     SendableRegistry.setName(m_Drivetrain, "DriveSubsystem", "Drivetrain");  
+
+    // Gyro setup
+    m_gyro.zeroYaw();
   }
 
   public void initDefaultCommand(Joystick Joystick, XboxController Controller, boolean isArcade)
@@ -277,6 +280,10 @@ public class DriveSubsystem extends SubsystemBase {
     } else {
       return m_rightPidControl.getTargetPosition();
     }
+  }
+
+  public float getGyroYaw() {
+    return m_gyro.getYaw();
   }
 
   // For Auto, returns the selected motors CURRENT position

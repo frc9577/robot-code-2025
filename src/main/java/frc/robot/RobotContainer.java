@@ -275,6 +275,8 @@ public class RobotContainer {
       SmartDashboard.putNumber("Right Encoder", m_driveSubsystem.getPosition(false));
       SmartDashboard.putNumber("Right Target", m_driveSubsystem.getTargetPosition(false));
       SmartDashboard.putNumber("Right Speed", m_driveSubsystem.getSpeed(false));
+
+      SmartDashboard.putNumber("Gyro Yaw", m_driveSubsystem.getGyroYaw());
     }
 
     // Coral subsystem state update.
