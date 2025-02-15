@@ -86,10 +86,15 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     public static final double kSpeedDivider = 1.0;
 
     // Auto PID stuff
-    public static final double kP = 0.3;// An error of 1 rotation results in 2.4 V output
+    public static final double kV = 0; // Add x V output to overcome static friction
+    public static final double kS = 0; // A velocity target of 1 rps results in xV output
+    public static final double kP = 0.3; // An error of 1 rotation results in x V output
     public static final double kI = 0.0;
-    public static final double kD = 0.1; // A velocity of 1 rps results in 0.1 V output
+    public static final double kD = 0.1; // A velocity of 1 rps results in x V output
     public static final double PeakVoltage = 10.0;
+
+    public static final int maxVelocity = 30; // rps/s
+    public static final int maxAcceleration = 50; // rps
 
     public static boolean kLeftPositiveMovesForward = true;
     public static boolean kRightPositiveMovesForward = false;

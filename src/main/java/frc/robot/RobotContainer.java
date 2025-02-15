@@ -144,7 +144,7 @@ public class RobotContainer {
       ));
 
     m_autoChooser.addOption("(PID) Drive forward 2 meters", 
-      new AutonomousDrivePID(m_driveSubsystem, 2.0, 2.0, 0.5));
+      new AutonomousDrivePID(m_driveSubsystem, 2.0, 2.0, 0.04));
 
     m_isArcadeChooser.setDefaultOption("Arcade Drive", true);
     m_isArcadeChooser.addOption("Tank Drive", false);
@@ -257,12 +257,12 @@ public class RobotContainer {
     // Drive subsystem (always present)
     if((m_iTickCount % Constants.DrivetrainConstants.kTicksPerUpdate) == 0)
     {
-      SmartDashboard.putNumber("Left Encoder", m_driveSubsystem.getLeftPosition());
-      SmartDashboard.putNumber("Left Target", m_driveSubsystem.getLeftTargetPosition());
+      SmartDashboard.putNumber("Left Encoder", m_driveSubsystem.getPosition(true));
+      SmartDashboard.putNumber("Left Target", m_driveSubsystem.getTargetPosition(true));
       SmartDashboard.putNumber("Left Speed", m_driveSubsystem.getSpeed(true));
 
-      SmartDashboard.putNumber("Right Encoder", m_driveSubsystem.getRightPosition());
-      SmartDashboard.putNumber("Right Target", m_driveSubsystem.getRightTargetPosition());
+      SmartDashboard.putNumber("Right Encoder", m_driveSubsystem.getPosition(false));
+      SmartDashboard.putNumber("Right Target", m_driveSubsystem.getTargetPosition(false));
       SmartDashboard.putNumber("Right Speed", m_driveSubsystem.getSpeed(false));
     }
 

@@ -18,6 +18,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -42,11 +43,76 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_leftSpeed  = 0.0;
   private double m_rightSpeed = 0.0;
 
-  private final PositionVoltage m_rightPositionVoltage = new PositionVoltage(0).withSlot(0);
-  private final PositionVoltage m_leftPositionVoltage = new PositionVoltage(0).withSlot(0);
+  public class pidControl {
+    private TalonFX m_motor;
+    private boolean m_positiveMovesForward;
 
-  private double m_leftTargetPosition = 0.0;
-  private double m_rightTargetPosition = 0.0;
+    private double m_targetPosition;
+
+    private final TrapezoidProfile m_profile = new TrapezoidProfile(
+      new TrapezoidProfile.Constraints(
+        DrivetrainConstants.maxVelocity, 
+        DrivetrainConstants.maxAcceleration
+      )
+    );
+
+    private PositionVoltage m_positionVoltage;
+    private TrapezoidProfile.State m_goal = new TrapezoidProfile.State();
+    private TrapezoidProfile.State m_setPoint = new TrapezoidProfile.State();
+
+    public pidControl(TalonFX motor, boolean positiveMovesForward) {
+      m_motor = motor;
+      m_positiveMovesForward = positiveMovesForward;
+    }
+
+    public void setTargetPosition(double position) {
+      m_targetPosition = position;
+
+      double positionRotations = position * DrivetrainConstants.kDrivetrainGearRatio;
+      if (!m_positiveMovesForward) {
+        positionRotations = -positionRotations;
+      }
+
+      m_motor.setPosition(0); // zero's motor at the start of the movement
+
+      m_goal = new TrapezoidProfile.State(positionRotations, 0);
+      m_setPoint = new TrapezoidProfile.State(0, 0);
+
+      m_positionVoltage = new PositionVoltage(0).withSlot(0);
+    }
+
+    public void calculatePosition() {
+      m_setPoint = m_profile.calculate(0.020, m_setPoint, m_goal);
+
+      m_positionVoltage.Position = m_setPoint.position;
+      m_positionVoltage.Velocity = m_setPoint.velocity;
+      m_motor.setControl(m_positionVoltage);
+    }
+
+    public double getTargetPosition() {
+      return m_targetPosition;
+    }
+
+    public double getPosition() {
+      double motorPosition = m_motor.getPosition().getValueAsDouble() / DrivetrainConstants.kDrivetrainGearRatio;
+
+      if (m_positiveMovesForward) {
+        return motorPosition;
+      } else {
+        return -motorPosition;
+      }
+    }
+  }
+
+  pidControl m_leftPidControl = new pidControl(
+    m_leftMotor, 
+    DrivetrainConstants.kLeftPositiveMovesForward
+  );
+
+  pidControl m_rightPidControl = new pidControl(
+    m_rightMotor, 
+    DrivetrainConstants.kRightPositiveMovesForward
+  );
 
   //The gyro sensor
   private final AHRS m_gyro = new AHRS(NavXComType.kMXP_SPI);
@@ -55,6 +121,8 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem() {
     // Setting up autoConfig
     TalonFXConfiguration autoConfig = new TalonFXConfiguration();
+    autoConfig.Slot0.kV = DrivetrainConstants.kV;
+    autoConfig.Slot0.kS = DrivetrainConstants.kS;
     autoConfig.Slot0.kP = DrivetrainConstants.kP;
     autoConfig.Slot0.kI = DrivetrainConstants.kI; // No output for integrated error
     autoConfig.Slot0.kD = DrivetrainConstants.kD; // A velocity of 1 rps results in 0.1 V output
@@ -187,79 +255,45 @@ public class DriveSubsystem extends SubsystemBase {
     }
   }
 
-  // For Auto, sets the left motors TARGET position
-  public void setLeftTargetPosition(double position)
-  {
-    m_leftTargetPosition = position;
-
-    double leftPositionRotations = position * DrivetrainConstants.kDrivetrainGearRatio;
-    if (!DrivetrainConstants.kLeftPositiveMovesForward) {
-      leftPositionRotations = -leftPositionRotations;
-    }
-
-    System.out.println("LPR: " + leftPositionRotations);
-
-    m_leftMotor.setPosition(0); // zero's motor at the start of the movement
-    m_leftMotor.setControl(m_leftPositionVoltage.withPosition(leftPositionRotations));
+  // For auto, sets both motors to the target position
+  public void setTargetPositionStraight(double position) {
+    m_leftPidControl.setTargetPosition(position);
+    m_rightPidControl.setTargetPosition(position);
   }
 
-  // For Auto, returns the left motors TARGET position
-  public double getLeftTargetPosition()
-  {
-    return m_leftTargetPosition;
-  }
-
-  // For Auto, returns the left motors CURRENT position
-  public double getLeftPosition()
-  {
-    double leftMotorPosition = m_leftMotor.getPosition().getValueAsDouble() / DrivetrainConstants.kDrivetrainGearRatio;
-
-    if (DrivetrainConstants.kLeftPositiveMovesForward) {
-      return leftMotorPosition;
+  // For Auto, sets the selected motors TARGET position
+  public void setTargetPosition(double position, boolean isLeft) {
+    if (isLeft) {
+      m_leftPidControl.setTargetPosition(position);
     } else {
-      return -leftMotorPosition;
+      m_rightPidControl.setTargetPosition(position);
     }
   }
 
-  // For Auto, sets the right motors TARGET position
-  public void setRightTargetPosition(double position)
-  {
-    m_rightTargetPosition = position;
-
-    double rightPositionRotations = position * DrivetrainConstants.kDrivetrainGearRatio;
-    if (!DrivetrainConstants.kRightPositiveMovesForward) {
-      rightPositionRotations = -rightPositionRotations;
-    }
-
-    System.out.println("RPR:" + rightPositionRotations);
-
-    m_rightMotor.setPosition(0); // zero's motor at the start of the movement
-    m_rightMotor.setControl(m_rightPositionVoltage.withPosition(rightPositionRotations));
-  }
-
-  // For Auto, returns the right motors TARGET position
-  public double getRightTargetPosition()
-  {
-    return m_rightTargetPosition;
-  }
-
-  // For Auto, returns the right motors CURRENT position
-  public double getRightPosition()
-  {
-    double rightMotorPosition = m_rightMotor.getPosition().getValueAsDouble() / DrivetrainConstants.kDrivetrainGearRatio;
-
-    if (DrivetrainConstants.kRightPositiveMovesForward) {
-      return rightMotorPosition;
+  // For Auto, returns the selected motors TARGET position
+  public double getTargetPosition(boolean isLeft) {
+    if (isLeft) {
+      return m_leftPidControl.getTargetPosition();
     } else {
-      return -rightMotorPosition;
+      return m_rightPidControl.getTargetPosition();
     }
+  }
+
+  // For Auto, returns the selected motors CURRENT position
+  public double getPosition(boolean isLeft)
+  {
+   if (isLeft) {
+    return m_leftPidControl.getPosition();
+   }  else {
+    return m_rightPidControl.getPosition();
+   }
   }
 
   // For Auto, returns if the left and right motor are within tolerance of the PID target
   public boolean isAtTarget(double tolerance) 
   {
-    double leftError = Math.abs(m_leftTargetPosition - getLeftPosition());
-    double rightError = Math.abs(m_rightTargetPosition - getRightPosition());
+    double leftError = Math.abs(m_leftPidControl.getTargetPosition() - m_leftPidControl.getPosition());
+    double rightError = Math.abs(m_rightPidControl.getTargetPosition() - m_rightPidControl.getPosition());
 
     return (leftError <= tolerance) && (rightError <= tolerance);
   }
@@ -268,6 +302,11 @@ public class DriveSubsystem extends SubsystemBase {
   // differential drive timeing out.
   public void callDrivetrainFeed() {
     m_Drivetrain.feed();
+  }
+
+  public void callCalculate() {
+    m_leftPidControl.calculatePosition();
+    m_rightPidControl.calculatePosition();
   }
 
   @Override

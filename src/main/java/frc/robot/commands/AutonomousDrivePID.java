@@ -33,8 +33,9 @@ public class AutonomousDrivePID extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_subsystem.setLeftTargetPosition(m_leftTarget);
-    m_subsystem.setRightTargetPosition(m_rightTarget);
+    m_subsystem.setTargetPosition(m_leftTarget, true);
+    m_subsystem.setTargetPosition(m_rightTarget, false);
+
     System.out.println("ADPID Init");
   }
 
@@ -43,19 +44,27 @@ public class AutonomousDrivePID extends Command {
   public void execute() {
     // This will stop the differential drive saftey warning
     m_subsystem.callDrivetrainFeed();
+    m_subsystem.callCalculate();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     System.out.println("Auto PID Ended");
-    m_subsystem.setLeftTargetPosition(0);
-    m_subsystem.setRightTargetPosition(0);
+
+    if (interrupted) {
+      m_subsystem.setTankSpeeds(0, 0);
+    }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_subsystem.isAtTarget(m_tolerance);
+    boolean isAtTarget = m_subsystem.isAtTarget(m_tolerance);
+    if (isAtTarget) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
