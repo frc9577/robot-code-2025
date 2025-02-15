@@ -73,12 +73,12 @@ public class DriveSubsystem extends SubsystemBase {
         positionRotations = -positionRotations;
       }
 
-      m_motor.setPosition(0); // zero's motor at the start of the movement
-
       m_goal = new TrapezoidProfile.State(positionRotations, 0);
       m_setPoint = new TrapezoidProfile.State(0, 0);
 
       m_positionVoltage = new PositionVoltage(0).withSlot(0);
+
+      m_motor.setPosition(0); // zero's motor at the start of the movement
     }
 
     public void calculatePosition() {

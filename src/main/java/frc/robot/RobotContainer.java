@@ -13,6 +13,7 @@ import frc.robot.commands.ChangeElevatorLevel;
 import frc.robot.commands.CoralIntakeCommand;
 import frc.robot.commands.CoralOutputCommand;
 import frc.robot.commands.CoralSpeedCommand;
+import frc.robot.commands.EmptyCommand;
 import frc.robot.commands.IntakeAlgaeCommand;
 import frc.robot.commands.OutputAlgaeCommand;
 import frc.robot.commands.SetElevatorLevel;
@@ -144,7 +145,17 @@ public class RobotContainer {
       ));
 
     m_autoChooser.addOption("(PID) Drive forward 2 meters", 
-      new AutonomousDrivePID(m_driveSubsystem, 2.0, 2.0, 0.04));
+      new AutonomousDrivePID(m_driveSubsystem, 2.0, 2.0, 0.04)
+    );
+    m_autoChooser.addOption("(PID) Drive backward 2 meters", 
+      new AutonomousDrivePID(m_driveSubsystem, -2.0, -2.0, 0.04)
+    );
+
+    m_autoChooser.addOption("(PID) Drive forward 2 meters then backward 2 meters",
+      new AutonomousDrivePID(m_driveSubsystem, 2.0, 2.0, 0.04)
+      .andThen(new TimedCommand(new EmptyCommand(), 1000))
+      .andThen(new AutonomousDrivePID(m_driveSubsystem, -2.0, -2.0, 0.04))
+    );
 
     m_isArcadeChooser.setDefaultOption("Arcade Drive", true);
     m_isArcadeChooser.addOption("Tank Drive", false);
