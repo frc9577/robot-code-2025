@@ -92,7 +92,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     public static final double PeakVoltage = 10.0;
 
     public static boolean kLeftPositiveMovesForward = true;
-    public static boolean kRightPositiveMovesForward = true;
+    public static boolean kRightPositiveMovesForward = false;
 
     // The distance travelled for a single rotation of the Kraken output shaft.
     public static final double kDrivetrainGearRatio = (8.46/0.478536);

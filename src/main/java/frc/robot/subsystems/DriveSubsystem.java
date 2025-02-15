@@ -143,8 +143,8 @@ public class DriveSubsystem extends SubsystemBase {
     m_rightMotor.setPosition(0);
 
     // Setting up the drive train
-    //m_Drivetrain = new DifferentialDrive(m_leftMotor::set, m_rightMotor::set);
-    //SendableRegistry.setName(m_Drivetrain, "DriveSubsystem", "Drivetrain");  
+    m_Drivetrain = new DifferentialDrive(m_leftMotor::set, m_rightMotor::set);
+    SendableRegistry.setName(m_Drivetrain, "DriveSubsystem", "Drivetrain");  
   }
 
   public void initDefaultCommand(Joystick Joystick, XboxController Controller, boolean isArcade)
@@ -163,7 +163,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_rightSpeed = (rightInput / DrivetrainConstants.kSpeedDivider);
 
     // NOTE: We are squaring the input to improve driver response
-    //m_Drivetrain.tankDrive(m_leftSpeed, m_rightSpeed, true);
+    m_Drivetrain.tankDrive(m_leftSpeed, m_rightSpeed, true);
   }
 
   public void setArcadeSpeeds(double speed, double rotation)
@@ -172,7 +172,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_rightSpeed = rotation;
 
     // NOTE: We are squaring the input to improve driver response
-    //m_Drivetrain.arcadeDrive(m_leftSpeed, m_rightSpeed, true);
+    m_Drivetrain.arcadeDrive(m_leftSpeed, m_rightSpeed, true);
   }
 
   public double getSpeed(boolean bLeft)
@@ -267,7 +267,7 @@ public class DriveSubsystem extends SubsystemBase {
   // For Auto, needs to be in an auto command execute, so we can use the PID without 
   // differential drive timeing out.
   public void callDrivetrainFeed() {
-    //m_Drivetrain.feed();
+    m_Drivetrain.feed();
   }
 
   @Override
