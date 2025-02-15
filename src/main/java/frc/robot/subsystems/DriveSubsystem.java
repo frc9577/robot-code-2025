@@ -6,8 +6,10 @@
 // (if any) is it making?
 
 package frc.robot.subsystems;
+import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
@@ -40,7 +42,8 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_leftSpeed  = 0.0;
   private double m_rightSpeed = 0.0;
 
-  private final PositionVoltage m_positionVoltage = new PositionVoltage(0).withSlot(0);
+  private final PositionVoltage m_rightPositionVoltage = new PositionVoltage(0).withSlot(0);
+  private final PositionVoltage m_leftPositionVoltage = new PositionVoltage(0).withSlot(0);
 
   private double m_leftTargetPosition = 0.0;
   private double m_rightTargetPosition = 0.0;
@@ -50,10 +53,14 @@ public class DriveSubsystem extends SubsystemBase {
   
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+    // Setting up autoConfig
     TalonFXConfiguration autoConfig = new TalonFXConfiguration();
     autoConfig.Slot0.kP = DrivetrainConstants.kP;
     autoConfig.Slot0.kI = DrivetrainConstants.kI; // No output for integrated error
     autoConfig.Slot0.kD = DrivetrainConstants.kD; // A velocity of 1 rps results in 0.1 V output
+
+    autoConfig.Voltage.withPeakForwardVoltage(Volts.of(DrivetrainConstants.PeakVoltage))
+    .withPeakReverseVoltage(Volts.of(-DrivetrainConstants.PeakVoltage));
 
     // Right Motor Setup
     final MotorOutputConfigs rightMotorOutputConfigs = new MotorOutputConfigs();
@@ -63,6 +70,7 @@ public class DriveSubsystem extends SubsystemBase {
     final TalonFXConfigurator rightMotorConfigurator = m_rightMotor.getConfigurator();
     rightMotorConfigurator.apply(rightMotorOutputConfigs);
     rightMotorConfigurator.apply(autoConfig); // i hope it wont overwrite above config
+    
     SendableRegistry.setName(m_rightMotor, "DriveSubsystem", "rightMotor");
 
     // Optional Right Motor
@@ -135,8 +143,8 @@ public class DriveSubsystem extends SubsystemBase {
     m_rightMotor.setPosition(0);
 
     // Setting up the drive train
-    m_Drivetrain = new DifferentialDrive(m_leftMotor::set, m_rightMotor::set);
-    SendableRegistry.setName(m_Drivetrain, "DriveSubsystem", "Drivetrain");  
+    //m_Drivetrain = new DifferentialDrive(m_leftMotor::set, m_rightMotor::set);
+    //SendableRegistry.setName(m_Drivetrain, "DriveSubsystem", "Drivetrain");  
   }
 
   public void initDefaultCommand(Joystick Joystick, XboxController Controller, boolean isArcade)
@@ -155,7 +163,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_rightSpeed = (rightInput / DrivetrainConstants.kSpeedDivider);
 
     // NOTE: We are squaring the input to improve driver response
-    m_Drivetrain.tankDrive(m_leftSpeed, m_rightSpeed, true);
+    //m_Drivetrain.tankDrive(m_leftSpeed, m_rightSpeed, true);
   }
 
   public void setArcadeSpeeds(double speed, double rotation)
@@ -164,7 +172,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_rightSpeed = rotation;
 
     // NOTE: We are squaring the input to improve driver response
-    m_Drivetrain.arcadeDrive(m_leftSpeed, m_rightSpeed, true);
+    //m_Drivetrain.arcadeDrive(m_leftSpeed, m_rightSpeed, true);
   }
 
   public double getSpeed(boolean bLeft)
@@ -184,13 +192,15 @@ public class DriveSubsystem extends SubsystemBase {
   {
     m_leftTargetPosition = position;
 
-    double leftPositionRotations = position / DrivetrainConstants.kDrivetrainGearRatio;
+    double leftPositionRotations = position * DrivetrainConstants.kDrivetrainGearRatio;
     if (!DrivetrainConstants.kLeftPositiveMovesForward) {
       leftPositionRotations = -leftPositionRotations;
     }
 
+    System.out.println("LPR: " + leftPositionRotations);
+
     m_leftMotor.setPosition(0); // zero's motor at the start of the movement
-    m_leftMotor.setControl(m_positionVoltage.withPosition(leftPositionRotations));
+    m_leftMotor.setControl(m_leftPositionVoltage.withPosition(leftPositionRotations));
   }
 
   // For Auto, returns the left motors TARGET position
@@ -202,7 +212,7 @@ public class DriveSubsystem extends SubsystemBase {
   // For Auto, returns the left motors CURRENT position
   public double getLeftPosition()
   {
-    double leftMotorPosition = m_leftMotor.getPosition().getValueAsDouble() * DrivetrainConstants.kDrivetrainGearRatio;
+    double leftMotorPosition = m_leftMotor.getPosition().getValueAsDouble() / DrivetrainConstants.kDrivetrainGearRatio;
 
     if (DrivetrainConstants.kLeftPositiveMovesForward) {
       return leftMotorPosition;
@@ -216,13 +226,15 @@ public class DriveSubsystem extends SubsystemBase {
   {
     m_rightTargetPosition = position;
 
-    double rightPositionRotations = position / DrivetrainConstants.kDrivetrainGearRatio;
+    double rightPositionRotations = position * DrivetrainConstants.kDrivetrainGearRatio;
     if (!DrivetrainConstants.kRightPositiveMovesForward) {
       rightPositionRotations = -rightPositionRotations;
     }
 
+    System.out.println("RPR:" + rightPositionRotations);
+
     m_rightMotor.setPosition(0); // zero's motor at the start of the movement
-    m_rightMotor.setControl(m_positionVoltage.withPosition(rightPositionRotations));
+    m_rightMotor.setControl(m_rightPositionVoltage.withPosition(rightPositionRotations));
   }
 
   // For Auto, returns the right motors TARGET position
@@ -234,7 +246,7 @@ public class DriveSubsystem extends SubsystemBase {
   // For Auto, returns the right motors CURRENT position
   public double getRightPosition()
   {
-    double rightMotorPosition = m_rightMotor.getPosition().getValueAsDouble() * DrivetrainConstants.kDrivetrainGearRatio;
+    double rightMotorPosition = m_rightMotor.getPosition().getValueAsDouble() / DrivetrainConstants.kDrivetrainGearRatio;
 
     if (DrivetrainConstants.kRightPositiveMovesForward) {
       return rightMotorPosition;
@@ -255,7 +267,7 @@ public class DriveSubsystem extends SubsystemBase {
   // For Auto, needs to be in an auto command execute, so we can use the PID without 
   // differential drive timeing out.
   public void callDrivetrainFeed() {
-    m_Drivetrain.feed();
+    //m_Drivetrain.feed();
   }
 
   @Override
@@ -265,5 +277,9 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
+  }
+
+  public void report() {
+    System.out.println("RMV: " + m_rightMotor.getVelocity());
   }
 }

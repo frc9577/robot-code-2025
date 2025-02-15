@@ -131,10 +131,6 @@ public class RobotContainer {
     AutonomousDrive autoDriveLeft = new AutonomousDrive(m_driveSubsystem, 
       AutoConstants.kTurnInnerSpeed, AutoConstants.kPassLineSpeed);
 
-    // Drive Forward 2 meter (PID)
-    AutonomousDrivePID autoDrive2MeterPID = new AutonomousDrivePID(m_driveSubsystem, 
-    2, 2, 0.5);
-
     // Drop-down chooser for auto program.
     m_autoChooser.setDefaultOption("(TIME) Drive Forward 2 Seconds", 
       new TimedCommand(autoDriveForward, 2000));
@@ -147,7 +143,8 @@ public class RobotContainer {
         new TimedCommand(autoDriveLeft, 2000)
       ));
 
-    m_autoChooser.addOption("(PID) Drive forward 2 meters", autoDrive2MeterPID);
+    m_autoChooser.addOption("(PID) Drive forward 2 meters", 
+      new AutonomousDrivePID(m_driveSubsystem, 2.0, 2.0, 0.5));
 
     m_isArcadeChooser.setDefaultOption("Arcade Drive", true);
     m_isArcadeChooser.addOption("Tank Drive", false);
