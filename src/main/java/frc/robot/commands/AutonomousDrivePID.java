@@ -43,7 +43,6 @@ public class AutonomousDrivePID extends Command {
   public void execute() {
     // This will stop the differential drive saftey warning
     m_subsystem.callDrivetrainFeed();
-    m_subsystem.report();
   }
 
   // Called once the command ends or is interrupted.
