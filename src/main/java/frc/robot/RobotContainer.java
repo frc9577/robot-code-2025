@@ -306,6 +306,8 @@ public class RobotContainer {
     if(m_coralSubsystem.isPresent() && (m_iTickCount % Constants.CoralConstants.kTicksPerUpdate) == 0)
     {
       SmartDashboard.putBoolean("Has Coral", m_coralSubsystem.get().hasCoral());
+      SmartDashboard.putNumber("Input Speed", m_coralSubsystem.get().getIntakeSpeed());
+      SmartDashboard.putNumber("Output Speed", m_coralSubsystem.get().getOutputSpeed());
     }
 
     // Elevator subsystem state update.

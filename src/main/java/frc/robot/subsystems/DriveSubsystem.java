@@ -43,6 +43,8 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_leftSpeed  = 0.0;
   private double m_rightSpeed = 0.0;
 
+  private double m_modeMultiplier = 1.0;
+
   public class pidControl {
     private TalonFX m_motor;
     private boolean m_positiveMovesForward;
@@ -230,8 +232,8 @@ public class DriveSubsystem extends SubsystemBase {
   // Sets left and right motors to set speeds to support tank drive models.
   public void setTankSpeeds(double leftInput, double rightInput)
   {
-    m_leftSpeed = (leftInput / DrivetrainConstants.kSpeedDivider);
-    m_rightSpeed = (rightInput / DrivetrainConstants.kSpeedDivider);
+    m_leftSpeed = (leftInput / DrivetrainConstants.kSpeedDivider) * m_modeMultiplier;
+    m_rightSpeed = (rightInput / DrivetrainConstants.kSpeedDivider) * m_modeMultiplier;
 
     // NOTE: We are squaring the input to improve driver response
     m_Drivetrain.tankDrive(m_leftSpeed, m_rightSpeed, true);
@@ -239,7 +241,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void setArcadeSpeeds(double speed, double rotation)
   {
-    m_leftSpeed = (speed / DrivetrainConstants.kSpeedDivider);
+    m_leftSpeed = (speed / DrivetrainConstants.kSpeedDivider) * m_modeMultiplier;
     m_rightSpeed = rotation;
 
     // NOTE: We are squaring the input to improve driver response

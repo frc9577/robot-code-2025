@@ -125,8 +125,8 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     public static final int kIntakeMotorCANID = 40;
     public static final int kOutputMotorCANID = 41;
 
-    public static final double kMotorIntakeSpeed = 0.3;
-    public static final double kMotorOutputSpeed = -0.3;
+    public static final double kMotorIntakeSpeed = -1;
+    public static final double kMotorOutputSpeed = 1;
 
     // number of ticks between sensor change and motor stop
     public static final int kEndIntakeMaxCount = 25; // 0.5 second(s)

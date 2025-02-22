@@ -29,7 +29,7 @@ public class CoralIntakeCommand extends Command {
   @Override
   public void initialize() {
     m_subsystem.setIntakeSpeed(CoralConstants.kMotorIntakeSpeed);
-    // need to run output motors to??
+    m_subsystem.setOutputSpeed(CoralConstants.kMotorOutputSpeed);
 
     m_endCounter = -1;
   }
