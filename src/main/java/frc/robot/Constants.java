@@ -73,6 +73,10 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
     public static final int kAlageIntake = 8; // START
     public static final int kAlageOutput = 7; // BACK
+
+    // driver controls
+    public static final int kEnableReverse = 9; // Jotstick button 9
+    public static final int kDisableReverse = 7; // Joystick button 7
   }
 
   public static class DrivetrainConstants {

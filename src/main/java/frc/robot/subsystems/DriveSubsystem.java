@@ -23,6 +23,7 @@ import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
 import frc.robot.commands.ArcadeDriveCommand;
@@ -246,6 +247,13 @@ public class DriveSubsystem extends SubsystemBase {
 
     // NOTE: We are squaring the input to improve driver response
     m_Drivetrain.arcadeDrive(m_leftSpeed, m_rightSpeed, true);
+  }
+
+  // Changes controls to normal or reverse mode's
+  public void setReverseMode(boolean reverseMode)
+  {
+    m_modeMultiplier = reverseMode ? -1.0 : 1.0;
+    SmartDashboard.putBoolean("Reverse Mode", reverseMode);
   }
 
   public double getSpeed(boolean bLeft)

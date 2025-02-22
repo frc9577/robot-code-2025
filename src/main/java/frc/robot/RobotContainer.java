@@ -18,6 +18,7 @@ import frc.robot.commands.EmptyCommand;
 import frc.robot.commands.IntakeAlgaeCommand;
 import frc.robot.commands.OutputAlgaeCommand;
 import frc.robot.commands.SetElevatorLevel;
+import frc.robot.commands.SetModeCommand;
 import frc.robot.commands.TimedCommand;
 import frc.robot.commands.ZeroElevator;
 import frc.robot.subsystems.AlgaeSubsystem;
@@ -63,6 +64,11 @@ public class RobotContainer {
   private final XboxController m_driverController = new XboxController(OperatorConstants.kDriverControllerPort);
 
   private final XboxController m_operatorController = new XboxController(OperatorConstants.kOperatorControllerPort);
+
+  private final JoystickButton m_enableReverse =
+    new JoystickButton(m_driverJoystick, OperatorConstants.kEnableReverse);
+  private final JoystickButton m_disableReverse = 
+    new JoystickButton(m_driverJoystick, OperatorConstants.kDisableReverse);
 
   private final JoystickButton m_zeroButton =
     new JoystickButton(m_operatorController, OperatorConstants.kZeroElevator);
@@ -255,6 +261,10 @@ public class RobotContainer {
       m_algaeIntakeButton.onTrue(new IntakeAlgaeCommand(algaeSubsystem));
       m_algaeOutputButton.onTrue(new OutputAlgaeCommand(algaeSubsystem));
     }
+
+    // Drive subsystem
+    m_enableReverse.onTrue(new SetModeCommand(m_driveSubsystem, true));
+    m_disableReverse.onTrue(new SetModeCommand(m_driveSubsystem, false));
   }
 
   private void configureDefaultCommands() {
