@@ -9,6 +9,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.RobotConstants;
 import frc.robot.commands.AutonomousDrive;
 import frc.robot.commands.AutonomousDrivePID;
+import frc.robot.commands.AutonomousTurnDegrees;
 import frc.robot.commands.ChangeElevatorLevel;
 import frc.robot.commands.CoralIntakeCommand;
 import frc.robot.commands.CoralOutputCommand;
@@ -155,6 +156,28 @@ public class RobotContainer {
       new AutonomousDrivePID(m_driveSubsystem, 2.0, 2.0, 0.04)
       .andThen(new TimedCommand(new EmptyCommand(), 1000))
       .andThen(new AutonomousDrivePID(m_driveSubsystem, -2.0, -2.0, 0.04))
+    );
+
+    m_autoChooser.addOption("(Gyro) Turn 90 Degrees clockwise", 
+      new AutonomousTurnDegrees(m_driveSubsystem, 90, 0.3)
+    );
+
+    m_autoChooser.addOption("(Gyro) Turn 90 Degrees counter-clockwise", 
+      new AutonomousTurnDegrees(m_driveSubsystem, -90, 0.3)
+    );
+
+    m_autoChooser.addOption("(Gyro) Turn 90 degrees clockwise then 90 degres counter-clockwise", 
+      new AutonomousTurnDegrees(m_driveSubsystem, 90, 0.3)
+      .andThen(new TimedCommand(new EmptyCommand(), 1000))
+      .andThen(new AutonomousTurnDegrees(m_driveSubsystem, -90, 0.3))
+    );
+
+    m_autoChooser.addOption("(Combined) Drive from blue most right to reef",
+      new AutonomousDrivePID(m_driveSubsystem, 1.517, 1.517, 0.04)
+      .andThen(new TimedCommand(new EmptyCommand(), 1000))
+      .andThen(new AutonomousTurnDegrees(m_driveSubsystem, 30, 0.3))
+      .andThen(new TimedCommand(new EmptyCommand(), 1000))
+      .andThen(new AutonomousDrivePID(m_driveSubsystem, 2.369, 2.369, 0.04))
     );
 
     m_isArcadeChooser.setDefaultOption("Arcade Drive", true);
