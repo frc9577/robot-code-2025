@@ -55,6 +55,11 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 
     public static final double minPnuematicsPressure = 80.0;
     public static final double maxPnuematicsPressure = 120.0;
+
+    /** Constants that define the settings of the driver camera */
+    public static final int kDriverCameraResolutionX = 640;
+    public static final int kDriverCameraResolutionY = 360;
+    public static final int kDriverCameraFPS         = 10;
   }
 
   public static class OperatorConstants {
@@ -176,7 +181,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     public static final double kMotorZeroingSpeed = -0.5;
     public static final boolean kPositiveMovesUp = true;
 
-    public static final double kP = 1.0;// An error of 1 rotation results in 2.4 V output
+    public static final double kP = 0.1;// An error of 1 rotation results in 2.4 V output
     public static final double kI = 0.0; // No output for integrated error
     public static final double kD = 0.1; // A velocity of 1 rps results in 0.1 V output
     public static final double PeakVoltage = 10.0;
@@ -191,7 +196,9 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     public static final double kElevatorL3Position = 0.8;
 
     // The distance travelled for a single rotation of the Kraken output shaft.
-    public static final double kElevatorGearRatio = ((1.0/64.0) * (0.04) * Math.PI);
+    // 64 to 1 gear box, pulley is 47.75mm diameter (0.15m circumference),
+    // two stage elevator moves twice the distance of the pulley.
+    public static final double kElevatorGearRatio = (2 * 0.15)/64;
 
     // SmartDashboard update frequency for elevator subsystem state in 20ms counts.
     public static final int kTicksPerUpdate = 5;
