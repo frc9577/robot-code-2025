@@ -133,8 +133,8 @@ package frc.robot;
     public static final int kIntakeMotorCANID = 40;
     public static final int kOutputMotorCANID = 41;
 
-    public static final double kMotorIntakeSpeed = -1;
-    public static final double kMotorOutputSpeed = 1;
+    public static final double kMotorIntakeSpeed = 1.0;
+    public static final double kMotorOutputSpeed = -1.0;
 
     // number of ticks between sensor change and motor stop
     public static final int kEndIntakeMaxCount = 25; // 0.5 second(s)
@@ -142,7 +142,7 @@ package frc.robot;
 
     // Line Break? sensor to detect coral in the middle
     public static final int kSensorChannel = 0;
-    public static final boolean kSensorFalseIsEmpty = false;
+    public static final boolean kSensorFalseIsEmpty = true;
 
     // SmartDashboard update frequency for coral subsystem state in 20ms counts.
     public static final int kTicksPerUpdate = 10;
@@ -150,6 +150,7 @@ package frc.robot;
 
   public static class AlgaeConstants {
     public static final int kMotorCANID = 50;
+    public static final int kMotorCurrentLimit = 5;
 
     public static final int kPneumaticsHubCANid = 1;
     public static final int kSolenoidChannel1 = 0;
@@ -173,7 +174,7 @@ package frc.robot;
   public static class ElevatorConstants {
     public static final int kMotorCANID = 60;
     public static final double kMotorZeroingSpeed = -0.5;
-    public static final boolean kPositiveMovesUp = true;
+    public static final boolean kPositiveMovesUp = false;
 
     public static final double kP = 0.1;// An error of 1 rotation results in 2.4 V output
     public static final double kI = 0.0; // No output for integrated error

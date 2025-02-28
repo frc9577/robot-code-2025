@@ -322,7 +322,7 @@ public class RobotContainer {
     {
       ElevatorSubsystem elevatorSubsystem = m_elevatorSubsystem.get();
 
-      SmartDashboard.putNumber("Elevator Encoder", elevatorSubsystem.getPosition());
+      SmartDashboard.putNumber("Elevator Position", elevatorSubsystem.getPosition());
       SmartDashboard.putNumber("Elevator Set Point", elevatorSubsystem.getTargetPosition());
       SmartDashboard.putNumber("Elevator Speed", elevatorSubsystem.getMotorSpeed());
       SmartDashboard.putNumber("Elevator Level Index", elevatorSubsystem.getElevatorLevelIndex());
