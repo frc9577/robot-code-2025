@@ -137,12 +137,12 @@ package frc.robot;
     public static final double kMotorOutputSpeed = -1.0;
 
     // number of ticks between sensor change and motor stop
-    public static final int kEndIntakeMaxCount = 25; // 0.5 second(s)
+    public static final int kEndIntakeMaxCount = 6; // ~0.125 second(s)
     public static final int kEndOutputMaxCount = 50; // 1 second(s)
 
     // Line Break? sensor to detect coral in the middle
     public static final int kSensorChannel = 0;
-    public static final boolean kSensorFalseIsEmpty = true;
+    public static final boolean kSensorFalseIsEmpty = false;
 
     // SmartDashboard update frequency for coral subsystem state in 20ms counts.
     public static final int kTicksPerUpdate = 10;
