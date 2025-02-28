@@ -37,6 +37,7 @@ public class AlgaeSubsystem extends SubsystemBase {
         // Let's query for firmare error status and use this for now.
         // Note that, for some reason, we can't rely on the CAN fault in
         // this case. Go figure.
+
         if (m_Motor.getFaults().firmware)
         {
             throw new RuntimeException("Algae subsystem motor not present");

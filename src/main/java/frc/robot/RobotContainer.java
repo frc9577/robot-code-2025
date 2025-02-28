@@ -129,8 +129,7 @@ public class RobotContainer {
   //
   // Configure all options that we want to display on the Shuffleboard dashboard.
   //
-  private void configureDriverStationControls()
-  {
+  private void configureDriverStationControls(){
     // Drive Forward (time)
     AutonomousDrive autoDriveForward = new AutonomousDrive(m_driveSubsystem, 
       AutoConstants.kPassLineSpeed, AutoConstants.kPassLineSpeed);
@@ -284,7 +283,6 @@ public class RobotContainer {
     return m_autoChooser.getSelected();
   }
 
-
   public void setDriveType() {
     m_driveSubsystem.initDefaultCommand(
       m_driverJoystick, 
@@ -293,8 +291,7 @@ public class RobotContainer {
     );
   }
 
-  public void UpdateSmartDashboard()
-  {
+  public void UpdateSmartDashboard() {
     // TODO: Use m_iTickCount to determine which status updates to send back to
     // the driver station. This function is called every 20mS.
 
@@ -352,6 +349,10 @@ public class RobotContainer {
     }
 
     m_iTickCount++;
+  }
+  
+  public void teleopInit() {
+    m_driveSubsystem.teleopInit();
   }
 
   // This gets called every system tick for testing.

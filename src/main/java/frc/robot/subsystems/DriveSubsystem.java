@@ -133,13 +133,8 @@ public class DriveSubsystem extends SubsystemBase {
     autoConfig.Voltage.withPeakForwardVoltage(Volts.of(DrivetrainConstants.PeakVoltage))
     .withPeakReverseVoltage(Volts.of(-DrivetrainConstants.PeakVoltage));
 
-    // Right Motor Setup
-    final MotorOutputConfigs rightMotorOutputConfigs = new MotorOutputConfigs();
-    rightMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive; // why is it a enum :sob:
-    rightMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
-
+    //Right Motor
     final TalonFXConfigurator rightMotorConfigurator = m_rightMotor.getConfigurator();
-    rightMotorConfigurator.apply(rightMotorOutputConfigs);
     rightMotorConfigurator.apply(autoConfig); // i hope it wont overwrite above config
     
     SendableRegistry.setName(m_rightMotor, "DriveSubsystem", "rightMotor");
@@ -147,15 +142,9 @@ public class DriveSubsystem extends SubsystemBase {
     // Optional Right Motor
     try {
       m_optionalRightMotor = new TalonFX(DrivetrainConstants.kOptionalRightMotorCANID);
-
-      // Setting up Config
-      final MotorOutputConfigs rightOptionalMotorOutputConfigs = new MotorOutputConfigs();
-      rightOptionalMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;
-      rightOptionalMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
   
       // Saving Config
       final TalonFXConfigurator rightOptionalMotorConfigurator = m_optionalRightMotor.getConfigurator();
-      rightOptionalMotorConfigurator.apply(rightOptionalMotorOutputConfigs);
       rightOptionalMotorConfigurator.apply(autoConfig); // i hope it wont overwrite above config
 
       // Setting as a follwer
@@ -163,31 +152,21 @@ public class DriveSubsystem extends SubsystemBase {
         new Follower(m_rightMotor.getDeviceID(), false)
       );
     }
-    catch (Exception e)
-    {
+    catch (Exception e) {
       e.printStackTrace();
     }
 
-    // Left Motor Setup
-    final MotorOutputConfigs leftMotorOutputConfigs = new MotorOutputConfigs();
-    leftMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
-
+    // Left Motor
     final TalonFXConfigurator leftMotorConfigurator = m_leftMotor.getConfigurator();
-    leftMotorConfigurator.apply(leftMotorOutputConfigs);
     leftMotorConfigurator.apply(autoConfig); // i hope it wont overwrite above config
     SendableRegistry.setName(m_leftMotor, "DriveSubsystem", "leftMotor");
 
     // Optional Left Motor
     try {
       m_optionalLeftMotor = new TalonFX(DrivetrainConstants.kOptionalLeftMotorCANID);
-
-      // Setting up config
-      final MotorOutputConfigs leftOptionalMotorOutputConfigs = new MotorOutputConfigs();
-      leftOptionalMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
   
       // Saving config
       final TalonFXConfigurator leftOptionalMotorConfigurator = m_optionalLeftMotor.getConfigurator();
-      leftOptionalMotorConfigurator.apply(leftOptionalMotorOutputConfigs);
       leftOptionalMotorConfigurator.apply(autoConfig); // i hope it wont overwrite above config
 
       // Setting as follower
@@ -218,6 +197,64 @@ public class DriveSubsystem extends SubsystemBase {
 
     // Gyro setup
     m_gyro.zeroYaw();
+  }
+
+  public void teleopInit() {
+    // Right Motor Setup
+    final MotorOutputConfigs rightMotorOutputConfigs = new MotorOutputConfigs();
+    rightMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive; // why is it a enum :sob:
+    rightMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
+
+    final TalonFXConfigurator rightMotorConfigurator = m_rightMotor.getConfigurator();
+    rightMotorConfigurator.apply(rightMotorOutputConfigs);
+
+    // Optional Right Motor
+    try {
+      // Setting up Config
+      final MotorOutputConfigs rightOptionalMotorOutputConfigs = new MotorOutputConfigs();
+      rightOptionalMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;
+      rightOptionalMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
+  
+      // Saving Config
+      final TalonFXConfigurator rightOptionalMotorConfigurator = m_optionalRightMotor.getConfigurator();
+      rightOptionalMotorConfigurator.apply(rightOptionalMotorOutputConfigs);
+
+      // Setting as a follwer
+      m_optionalRightMotor.setControl(
+        new Follower(m_rightMotor.getDeviceID(), false)
+      );
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    // Left Motor Setup
+    final MotorOutputConfigs leftMotorOutputConfigs = new MotorOutputConfigs();
+    leftMotorOutputConfigs.Inverted = InvertedValue.CounterClockwise_Positive; // why is it a enum :sob:
+    leftMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
+
+    final TalonFXConfigurator leftMotorConfigurator = m_leftMotor.getConfigurator();
+    leftMotorConfigurator.apply(leftMotorOutputConfigs);
+
+    // Optional Left Motor
+    try {
+      // Setting up Config
+      final MotorOutputConfigs leftOptionalMotorOutputConfigs = new MotorOutputConfigs();
+      leftOptionalMotorOutputConfigs.Inverted = InvertedValue.CounterClockwise_Positive;
+      leftOptionalMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
+  
+      // Saving Config
+      final TalonFXConfigurator leftOptionalMotorConfigurator = m_optionalLeftMotor.getConfigurator();
+      leftOptionalMotorConfigurator.apply(leftOptionalMotorOutputConfigs);
+
+      // Setting as a follwer
+      m_optionalLeftMotor.setControl(
+        new Follower(m_leftMotor.getDeviceID(), false)
+      );
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   public void initDefaultCommand(Joystick Joystick, XboxController Controller, boolean isArcade)
