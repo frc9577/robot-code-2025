@@ -34,9 +34,9 @@ public class ElevatorDefaultCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // Note: We negate the axis values so that pushing the joystick forwards
+    // Note: We DONT negate the axis values so that pushing the joystick forwards
     // results in upward motion. This is code to drive the elevator with no PID.
-    //m_subsystem.setMotorSpeed(-m_operatorController.getRightY());
+    //m_subsystem.setMotorSpeed(m_operatorController.getRightY());
 
     double joystickY = -m_operatorController.getRightY();
     double height = m_subsystem.getTargetPosition();

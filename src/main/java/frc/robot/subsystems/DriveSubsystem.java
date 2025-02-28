@@ -183,7 +183,6 @@ public class DriveSubsystem extends SubsystemBase {
 
       // Setting up config
       final MotorOutputConfigs leftOptionalMotorOutputConfigs = new MotorOutputConfigs();
-      leftOptionalMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;
       leftOptionalMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
   
       // Saving config

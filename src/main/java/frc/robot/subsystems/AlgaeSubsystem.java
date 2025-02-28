@@ -6,15 +6,22 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AlgaeConstants;
 
 public class AlgaeSubsystem extends SubsystemBase {
-    private final DoubleSolenoid m_Solenoid = new DoubleSolenoid(
-                  AlgaeConstants.kPneumaticsHubCANid, PneumaticsModuleType.REVPH, 
-                  AlgaeConstants.kExtendChannel, AlgaeConstants.kRetractChannel);
+    private final Solenoid m_Solenoid1 = new Solenoid(
+        PneumaticsModuleType.REVPH,
+        AlgaeConstants.kSolenoidChannel1
+    );
+    private final Solenoid m_Solenoid2 = new Solenoid(
+        PneumaticsModuleType.REVPH,
+        AlgaeConstants.kSolenoidChannel2
+    );
+
+    private boolean m_isExtented = false;
 
     private final DigitalInput m_Sensor = new DigitalInput(AlgaeConstants.kSensorChannel);
 
@@ -32,46 +39,23 @@ public class AlgaeSubsystem extends SubsystemBase {
         // this case. Go figure.
         if (m_Motor.getFaults().firmware)
         {
-        throw new RuntimeException("Algae subsystem motor not present");
+            throw new RuntimeException("Algae subsystem motor not present");
         }
     }
-
-    public enum State {
-      OFF,
-      DEPLOYED,
-      RETRACTED
-    }
-
-    private State m_currentState = State.OFF;
 
     // Sets the position (state) of the mechanism.
-    public void setPosition(State newState)
+    public void setPosition(Boolean isExtended)
     {
-        m_currentState = newState;
-        DoubleSolenoid.Value newValue = DoubleSolenoid.Value.kOff;
-
-        switch (m_currentState) 
-        {
-        case OFF:
-            newValue = AlgaeConstants.kOffState;
-            break;
-
-        case DEPLOYED:
-            newValue = AlgaeConstants.kDeployedState;
-            break;
-
-        case RETRACTED:
-            newValue = AlgaeConstants.kReteactedState;
-            break;
-        }
-
-        m_Solenoid.set(newValue);
+        m_isExtented = isExtended;
+        
+        m_Solenoid1.set(isExtended);
+        m_Solenoid2.set(isExtended);
     }
 
     // gets the last commanded position (state) of the mechanism
-    public State getPosition()
+    public Boolean isExtended()
     {
-        return m_currentState;
+        return m_isExtented;
     }
 
     // checks if you have an algae in posession

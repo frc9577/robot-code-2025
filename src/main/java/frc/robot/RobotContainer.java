@@ -339,12 +339,15 @@ public class RobotContainer {
       // TODO: Do intake stuff here.
     }
 
+    // Compressor
+    if ((m_iTickCount % Constants.RobotConstants.kpnuematicsTicksPerUpdate) == 0) {
+      SmartDashboard.putNumber("Pressure", m_pnuematicHub.getPressure(0));
+      SmartDashboard.putBoolean("Compressor Running", m_pnuematicHub.getCompressor());
+    }
+
     // Algae subsystem state update.
     if(m_algaeSubsystem.isPresent() && (m_iTickCount % Constants.AlgaeConstants.kTicksPerUpdate) == 0)
     {
-      SmartDashboard.putNumber("Pressure", m_pnuematicHub.getPressure(0));
-      SmartDashboard.putBoolean("Compressor Running", m_pnuematicHub.getCompressor());
-
       SmartDashboard.putBoolean("Has Algae", m_algaeSubsystem.get().hasAlgae());
     }
 

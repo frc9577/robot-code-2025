@@ -30,7 +30,7 @@ public class IntakeAlgaeCommand extends Command {
   @Override
   public void initialize() {
     m_subsystem.setIntakeSpeed(AlgaeConstants.kIntakeSpeed);
-    m_subsystem.setPosition(AlgaeSubsystem.State.DEPLOYED);
+    m_subsystem.setPosition(true);
     m_endCounter = -1;
   }
 
@@ -44,7 +44,7 @@ public class IntakeAlgaeCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     m_subsystem.setIntakeSpeed(0.0);
-    m_subsystem.setPosition(AlgaeSubsystem.State.RETRACTED);
+    m_subsystem.setPosition(false);
   }
 
   // Returns true when the command should end.

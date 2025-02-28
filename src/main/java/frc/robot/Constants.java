@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -105,6 +103,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     public static final int maxVelocity = 30; // rps/s
     public static final int maxAcceleration = 50; // rps
 
+    // For Auto Potentially
     public static boolean kLeftPositiveMovesForward = true;
     public static boolean kRightPositiveMovesForward = false;
 
@@ -153,6 +152,8 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     public static final int kMotorCANID = 50;
 
     public static final int kPneumaticsHubCANid = 1;
+    public static final int kSolenoidChannel1 = 0;
+    public static final int kSolenoidChannel2 = 15;
 
     public static final int kSensorChannel = 3;
     public static final boolean kSensorFalseIsEmpty = false;
@@ -161,16 +162,9 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
     public static final int kEndIntakeMaxCount = 0; // 0 second(s)
     public static final int kEndOutputMaxCount = 50; // 1 second(s)
 
-    // Temp Values, Needs to be changed when solunoid is set up onto the robot
-    public static final int kExtendChannel = 15;
-    public static final int kRetractChannel = 0;
-
+    // TODO: Speed these up
     public static final double kIntakeSpeed = 0.3;
-    public static final double kOutputSpeed = 0.3;
-
-    public static final DoubleSolenoid.Value kOffState = DoubleSolenoid.Value.kOff;
-    public static final DoubleSolenoid.Value kDeployedState = DoubleSolenoid.Value.kForward;
-    public static final DoubleSolenoid.Value kReteactedState = DoubleSolenoid.Value.kReverse;
+    public static final double kOutputSpeed = -0.3;
 
     // SmartDashboard update frequency for algae subsystem state in 20ms counts.
     public static final int kTicksPerUpdate = 25;
