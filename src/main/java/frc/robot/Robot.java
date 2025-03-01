@@ -5,8 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.MjpegServer;
 import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -22,8 +22,6 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
 
-  private UsbCamera driverCamera;
-
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -38,10 +36,12 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
 
     // Start the driver camera streaming.
-    driverCamera = CameraServer.startAutomaticCapture("Driver Camera", 0);
-    driverCamera.setResolution(RobotConstants.kDriverCameraResolutionX, RobotConstants.kDriverCameraResolutionY);
-    driverCamera.setFPS(RobotConstants.kDriverCameraFPS);
-    driverCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+    MjpegServer server = CameraServer.addServer("Driver Camera");
+    UsbCamera camera = new UsbCamera("Driver Camera", 0);
+    camera.setResolution(RobotConstants.kDriverCameraResolutionX, RobotConstants.kDriverCameraResolutionY);
+    camera.setFPS(RobotConstants.kDriverCameraFPS);
+    
+    server.setSource(camera);
   }
 
   /**

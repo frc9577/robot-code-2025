@@ -157,13 +157,12 @@ package frc.robot;
     public static final int kSolenoidChannel2 = 15;
 
     public static final int kSensorChannel = 3;
-    public static final boolean kSensorFalseIsEmpty = false;
+    public static final boolean kSensorFalseIsEmpty = true;
 
     // number of ticks between sensor change and motor stop
     public static final int kEndIntakeMaxCount = 0; // 0 second(s)
     public static final int kEndOutputMaxCount = 100; // 2 second(s)
 
-    // TODO: Speed these up
     public static final double kIntakeSpeed = 1.0;
     public static final double kOutputSpeed = -1.0;
 
