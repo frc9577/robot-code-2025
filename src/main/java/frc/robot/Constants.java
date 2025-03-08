@@ -174,19 +174,22 @@ package frc.robot;
     public static final double kMotorZeroingSpeed = -0.5;
     public static final boolean kPositiveMovesUp = false;
 
-    public static final double kP = 0.1;// An error of 1 rotation results in 2.4 V output
-    public static final double kI = 0.0; // No output for integrated error
-    public static final double kD = 0.1; // A velocity of 1 rps results in 0.1 V output
+    public static final double kV = 0;
+    public static final double kS = 0;
+    public static final double kP = 0.4;// An error of 1 rotation results in 2.4 V output
+    public static final double kI = 0.001; // No output for integrated error
+    public static final double kD = 0.15; // A velocity of 1 rps results in 0.1 V output
     public static final double PeakVoltage = 10.0;
     
-    public static final double maxElevatorHeight = 1.2;
+    public static final double maxElevatorHeight = 1.59;
 
     public static final int kSensorChannel = 4;
     public static final boolean kSensorFalseIsEmpty = false;
 
     public static final double kElevatorIntakePosition = 0.0;
-    public static final double kElevatorL2Position = 0.5;
-    public static final double kElevatorL3Position = 0.8;
+    public static final double kElevatorL2Position = 0.50;
+    public static final double kElevatorL3Position = 0.89;
+    public static final double kElevatorL4Position = 1.57;
 
     // The distance travelled for a single rotation of the Kraken output shaft.
     // 64 to 1 gear box, pulley is 47.75mm diameter (0.15m circumference),

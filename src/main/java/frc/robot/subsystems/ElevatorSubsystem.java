@@ -36,7 +36,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     ElevatorConstants.kElevatorIntakePosition,
     ElevatorConstants.kElevatorL2Position,
     ElevatorConstants.kElevatorL3Position,
-    ElevatorConstants.maxElevatorHeight
+    ElevatorConstants.kElevatorL4Position
   };
 
   /** Creates a new ElevatorSubsystem. */
@@ -52,6 +52,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     TalonFXConfiguration configs = new TalonFXConfiguration();
+    configs.Slot0.kV = ElevatorConstants.kV;
+    configs.Slot0.kS = ElevatorConstants.kS;
     configs.Slot0.kP = ElevatorConstants.kP;
     configs.Slot0.kI = ElevatorConstants.kI; // No output for integrated error
     configs.Slot0.kD = ElevatorConstants.kD; // A velocity of 1 rps results in 0.1 V output

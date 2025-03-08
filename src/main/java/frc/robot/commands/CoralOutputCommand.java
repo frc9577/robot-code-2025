@@ -54,6 +54,6 @@ public class CoralOutputCommand extends Command {
         m_endCounter++;
     }
 
-    return (m_endCounter >= CoralConstants.kEndIntakeMaxCount);
+    return (m_endCounter >= CoralConstants.kEndOutputMaxCount);
   }
 }

@@ -36,27 +36,27 @@ public class ElevatorDefaultCommand extends Command {
   public void execute() {
     // Note: We negate the axis values so that pushing the joystick forwards
     // results in upward motion. This is code to drive the elevator with no PID.
-    m_subsystem.setMotorSpeed(-(m_operatorController.getRightY()/2));
+    // m_subsystem.setMotorSpeed(-(m_operatorController.getRightY()/2));
 
-    // double joystickY = -m_operatorController.getRightY();
-    // double height = m_subsystem.getTargetPosition();
+    double joystickY = -m_operatorController.getRightY();
+    double height = m_subsystem.getTargetPosition();
 
-    // if (joystickY >= 0.75) {
-    //   height += 0.001;
-    // }
-    // if (joystickY <= -0.75) {
-    //   height -= 0.001;
-    // }
+    if (joystickY >= 0.75) {
+      height += 0.001;
+    }
+    if (joystickY <= -0.75) {
+      height -= 0.001;
+    }
 
-    // // Allows the operator to set the elevator into negitaive setpoints
-    // // when the elevator zero switch is not on incase of setpoint drift.
-    // if (m_subsystem.isElevatorDown() == true) {
-    //   height = Math.min(Math.max(height, 0), ElevatorConstants.maxElevatorHeight);
-    // } else {
-    //   height = Math.min(height, ElevatorConstants.maxElevatorHeight);
-    // }
+    // Allows the operator to set the elevator into negitaive setpoints
+    // when the elevator zero switch is not on incase of setpoint drift.
+    if (m_subsystem.isElevatorDown() == true) {
+      height = Math.min(Math.max(height, 0), ElevatorConstants.maxElevatorHeight);
+    } else {
+      height = Math.min(height, ElevatorConstants.maxElevatorHeight);
+    }
 
-    // m_subsystem.setTargetPosition(height);
+    m_subsystem.setTargetPosition(height);
   }
 
   // Called once the command ends or is interrupted.
