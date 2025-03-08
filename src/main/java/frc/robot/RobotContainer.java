@@ -4,10 +4,8 @@
 
 package frc.robot;
 
-import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.RobotConstants;
-import frc.robot.commands.AutonomousDrive;
 import frc.robot.commands.AutonomousDrivePID;
 import frc.robot.commands.AutonomousTurnDegrees;
 import frc.robot.commands.ChangeElevatorLevel;
@@ -29,7 +27,6 @@ import frc.robot.subsystems.IntakeSubsystem;
 
 import java.util.Optional;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -60,15 +57,14 @@ public class RobotContainer {
   private final Optional<AlgaeSubsystem> m_algaeSubsystem;
 
   // Joysticks
-  private final Joystick m_driverJoystick = new Joystick(OperatorConstants.kDriverJoystickPort);
   private final XboxController m_driverController = new XboxController(OperatorConstants.kDriverControllerPort);
 
   private final XboxController m_operatorController = new XboxController(OperatorConstants.kOperatorControllerPort);
 
   private final JoystickButton m_enableReverse =
-    new JoystickButton(m_driverJoystick, OperatorConstants.kEnableReverse);
+    new JoystickButton(m_driverController, OperatorConstants.kEnableReverse);
   private final JoystickButton m_disableReverse = 
-    new JoystickButton(m_driverJoystick, OperatorConstants.kDisableReverse);
+    new JoystickButton(m_driverController, OperatorConstants.kDisableReverse);
 
   private final JoystickButton m_zeroButton =
     new JoystickButton(m_operatorController, OperatorConstants.kZeroElevator);
@@ -130,27 +126,8 @@ public class RobotContainer {
   // Configure all options that we want to display on the Shuffleboard dashboard.
   //
   private void configureDriverStationControls(){
-    // Drive Forward (time)
-    AutonomousDrive autoDriveForward = new AutonomousDrive(m_driveSubsystem, 
-      AutoConstants.kPassLineSpeed, AutoConstants.kPassLineSpeed);
-
-    // Turn Left (time)
-    AutonomousDrive autoDriveLeft = new AutonomousDrive(m_driveSubsystem, 
-      AutoConstants.kTurnInnerSpeed, AutoConstants.kPassLineSpeed);
-
     // Drop-down chooser for auto program.
-    m_autoChooser.setDefaultOption("(TIME) Drive Forward 2 Seconds", 
-      new TimedCommand(autoDriveForward, 2000));
-    
-    m_autoChooser.addOption("(TIME) Turn left 2 Seconds", 
-      new TimedCommand(autoDriveLeft, 2000));
-    
-    m_autoChooser.addOption("(TIME) Drive forward 2 seconds then turn left 2 Seconds", 
-      new TimedCommand(autoDriveForward, 2000).andThen(
-        new TimedCommand(autoDriveLeft, 2000)
-      ));
-
-    m_autoChooser.addOption("(PID) Drive forward 2 meters", 
+    m_autoChooser.setDefaultOption("(PID) Drive forward 2 meters", 
       new AutonomousDrivePID(m_driveSubsystem, 2.0, 2.0, 0.04)
     );
     m_autoChooser.addOption("(PID) Drive forward 5 meters", 
@@ -288,7 +265,6 @@ public class RobotContainer {
 
   public void setDriveType() {
     m_driveSubsystem.initDefaultCommand(
-      m_driverJoystick, 
       m_driverController, 
       m_isArcadeChooser.getSelected()
     );

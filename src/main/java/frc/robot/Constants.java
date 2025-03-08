@@ -61,9 +61,8 @@ package frc.robot;
   }
 
   public static class OperatorConstants {
-    public static final int kDriverJoystickPort = 0;
-    public static final int kOperatorControllerPort = 1;
-    public static final int kDriverControllerPort = 2;
+    public static final int kOperatorControllerPort = 0;
+    public static final int kDriverControllerPort = 1;
 
     public static final int kZeroElevator = 3; // Button X
     public static final int kDecreeseElevatorLevel = 1; // Button A
@@ -78,8 +77,8 @@ package frc.robot;
     public static final int kAlageOutput = 7; // BACK
 
     // driver controls
-    public static final int kEnableReverse = 9; // Jotstick button 9
-    public static final int kDisableReverse = 7; // Joystick button 7
+    public static final int kEnableReverse = 1; // Button A
+    public static final int kDisableReverse = 4; // Button Y
   }
 
   public static class DrivetrainConstants {
@@ -89,8 +88,8 @@ package frc.robot;
     public static final int kRightMotorCANID = 20;
     public static final int kOptionalRightMotorCANID = 21;
 
-    public static final double kTurnDivider = 1.0;
-    public static final double kSpeedDivider = 1.0;
+    public static final double kTurnDivider = 2;
+    public static final double kSpeedDivider = 1.5;
 
     // Auto PID stuff
     public static final double kV = 0; // Add x V output to overcome static friction
@@ -150,7 +149,7 @@ package frc.robot;
 
   public static class AlgaeConstants {
     public static final int kMotorCANID = 50;
-    public static final int kMotorCurrentLimit = 5;
+    public static final int kMotorCurrentLimit = 7;
 
     public static final int kPneumaticsHubCANid = 1;
     public static final int kSolenoidChannel1 = 0;
@@ -163,8 +162,8 @@ package frc.robot;
     public static final int kEndIntakeMaxCount = 0; // 0 second(s)
     public static final int kEndOutputMaxCount = 100; // 2 second(s)
 
-    public static final double kIntakeSpeed = 1.0;
-    public static final double kOutputSpeed = -1.0;
+    public static final double kIntakeSpeed = 1;
+    public static final double kOutputSpeed = -1  ;
 
     // SmartDashboard update frequency for algae subsystem state in 20ms counts.
     public static final int kTicksPerUpdate = 25;

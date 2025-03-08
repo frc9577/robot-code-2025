@@ -20,7 +20,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.util.sendable.SendableRegistry;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -257,10 +256,10 @@ public class DriveSubsystem extends SubsystemBase {
     }
   }
 
-  public void initDefaultCommand(Joystick Joystick, XboxController Controller, boolean isArcade)
+  public void initDefaultCommand(XboxController Controller, boolean isArcade)
   {
     if (isArcade == true) {
-      setDefaultCommand(new ArcadeDriveCommand(this, Joystick));
+      setDefaultCommand(new ArcadeDriveCommand(this, Controller));
     } else {
       setDefaultCommand(new TankDriveCommand(this, Controller));
     }
@@ -276,12 +275,15 @@ public class DriveSubsystem extends SubsystemBase {
     m_Drivetrain.tankDrive(m_leftSpeed, m_rightSpeed, true);
   }
 
-  public void setArcadeSpeeds(double speed, double rotation)
+  public void setArcadeSpeeds(double joystickInput, double rotationInput)
   {
-    m_leftSpeed = (speed / DrivetrainConstants.kSpeedDivider) * m_modeMultiplier;
-    m_rightSpeed = rotation;
+    m_leftSpeed = (joystickInput / DrivetrainConstants.kSpeedDivider) * m_modeMultiplier;
+    m_rightSpeed = (rotationInput / DrivetrainConstants.kTurnDivider);
 
-    // NOTE: We are squaring the input to improve driver response
+    // NOTE: We are making our own custom input modifications
+    //m_leftSpeed = Math.pow(m_leftSpeed, 3);
+    //m_rightSpeed = Math.pow(m_rightSpeed, 3);
+
     m_Drivetrain.arcadeDrive(m_leftSpeed, m_rightSpeed, true);
   }
 
