@@ -136,6 +136,9 @@ public class RobotContainer {
     m_autoChooser.addOption("(PID) Drive backward 2 meters", 
       new AutonomousDrivePID(m_driveSubsystem, -2.0, -2.0, 0.04)
     );
+    m_autoChooser.addOption("(PID) Drive backward 5 meters", 
+      new AutonomousDrivePID(m_driveSubsystem, -5.0, -5.0, 0.04)
+    );
 
     m_autoChooser.addOption("(PID) Drive forward 2 meters then backward 2 meters",
       new AutonomousDrivePID(m_driveSubsystem, 2.0, 2.0, 0.04)
