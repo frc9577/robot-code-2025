@@ -104,7 +104,7 @@ package frc.robot;
 
     // For Auto Potentially
     public static boolean kLeftPositiveMovesForward = true;
-    public static boolean kRightPositiveMovesForward = false;
+    public static boolean kRightPositiveMovesForward = true;
 
     // The distance travelled for a single rotation of the Kraken output shaft.
     public static final double kDrivetrainGearRatio = (8.46/0.478536);
@@ -181,15 +181,15 @@ package frc.robot;
     public static final double kD = 0.15; // A velocity of 1 rps results in 0.1 V output
     public static final double PeakVoltage = 10.0;
     
-    public static final double maxElevatorHeight = 1.59;
+    public static final double maxElevatorHeight = 1.53;
 
     public static final int kSensorChannel = 4;
     public static final boolean kSensorFalseIsEmpty = false;
 
     public static final double kElevatorIntakePosition = 0.0;
-    public static final double kElevatorL2Position = 0.50;
-    public static final double kElevatorL3Position = 0.89;
-    public static final double kElevatorL4Position = 1.57;
+    public static final double kElevatorL2Position = 0.46; // 0.45-0.47??
+    public static final double kElevatorL3Position = 0.82;
+    public static final double kElevatorL4Position = 1.51;
 
     // The distance travelled for a single rotation of the Kraken output shaft.
     // 64 to 1 gear box, pulley is 47.75mm diameter (0.15m circumference),

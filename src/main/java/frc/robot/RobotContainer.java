@@ -333,8 +333,9 @@ public class RobotContainer {
     m_iTickCount++;
   }
   
+  // This runs on teleop init.
   public void teleopInit() {
-    m_driveSubsystem.teleopInit();
+    
   }
 
   // This gets called every system tick for testing.

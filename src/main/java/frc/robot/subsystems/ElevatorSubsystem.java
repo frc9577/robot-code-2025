@@ -10,6 +10,7 @@ import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
@@ -52,6 +53,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     TalonFXConfiguration configs = new TalonFXConfiguration();
+    configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     configs.Slot0.kV = ElevatorConstants.kV;
     configs.Slot0.kS = ElevatorConstants.kS;
     configs.Slot0.kP = ElevatorConstants.kP;

@@ -121,30 +121,43 @@ public class DriveSubsystem extends SubsystemBase {
   
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-    // Setting up autoConfig
-    TalonFXConfiguration autoConfig = new TalonFXConfiguration();
-    autoConfig.Slot0.kV = DrivetrainConstants.kV;
-    autoConfig.Slot0.kS = DrivetrainConstants.kS;
-    autoConfig.Slot0.kP = DrivetrainConstants.kP;
-    autoConfig.Slot0.kI = DrivetrainConstants.kI; // No output for integrated error
-    autoConfig.Slot0.kD = DrivetrainConstants.kD; // A velocity of 1 rps results in 0.1 V output
+    // Right Motor
+    TalonFXConfiguration rightMotorConfig = new TalonFXConfiguration();
+    rightMotorConfig.Slot0.kV = DrivetrainConstants.kV;
+    rightMotorConfig.Slot0.kS = DrivetrainConstants.kS;
+    rightMotorConfig.Slot0.kP = DrivetrainConstants.kP;
+    rightMotorConfig.Slot0.kI = DrivetrainConstants.kI; // No output for integrated error
+    rightMotorConfig.Slot0.kD = DrivetrainConstants.kD; // A velocity of 1 rps results in 0.1 V output
 
-    autoConfig.Voltage.withPeakForwardVoltage(Volts.of(DrivetrainConstants.PeakVoltage))
+    rightMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    rightMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
+    rightMotorConfig.Voltage.withPeakForwardVoltage(Volts.of(DrivetrainConstants.PeakVoltage))
     .withPeakReverseVoltage(Volts.of(-DrivetrainConstants.PeakVoltage));
 
-    //Right Motor
-    final TalonFXConfigurator rightMotorConfigurator = m_rightMotor.getConfigurator();
-    rightMotorConfigurator.apply(autoConfig); // i hope it wont overwrite above config
-    
+    m_rightMotor.getConfigurator().apply(rightMotorConfig);    
     SendableRegistry.setName(m_rightMotor, "DriveSubsystem", "rightMotor");
 
     // Optional Right Motor
     try {
       m_optionalRightMotor = new TalonFX(DrivetrainConstants.kOptionalRightMotorCANID);
   
-      // Saving Config
-      final TalonFXConfigurator rightOptionalMotorConfigurator = m_optionalRightMotor.getConfigurator();
-      rightOptionalMotorConfigurator.apply(autoConfig); // i hope it wont overwrite above config
+      // Setting up Config
+      TalonFXConfiguration optionalRightMotorConfig = new TalonFXConfiguration();
+      optionalRightMotorConfig.Slot0.kV = DrivetrainConstants.kV;
+      optionalRightMotorConfig.Slot0.kS = DrivetrainConstants.kS;
+      optionalRightMotorConfig.Slot0.kP = DrivetrainConstants.kP;
+      optionalRightMotorConfig.Slot0.kI = DrivetrainConstants.kI; // No output for integrated error
+      optionalRightMotorConfig.Slot0.kD = DrivetrainConstants.kD; // A velocity of 1 rps results in 0.1 V output
+
+      optionalRightMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+      optionalRightMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+
+      optionalRightMotorConfig.Voltage.withPeakForwardVoltage(Volts.of(DrivetrainConstants.PeakVoltage))
+      .withPeakReverseVoltage(Volts.of(-DrivetrainConstants.PeakVoltage));
+
+      // Saving
+      m_optionalRightMotor.getConfigurator().apply(optionalRightMotorConfig);
 
       // Setting as a follwer
       m_optionalRightMotor.setControl(
@@ -156,17 +169,42 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     // Left Motor
-    final TalonFXConfigurator leftMotorConfigurator = m_leftMotor.getConfigurator();
-    leftMotorConfigurator.apply(autoConfig); // i hope it wont overwrite above config
+    TalonFXConfiguration leftMotorConfig = new TalonFXConfiguration();
+    leftMotorConfig.Slot0.kV = DrivetrainConstants.kV;
+    leftMotorConfig.Slot0.kS = DrivetrainConstants.kS;
+    leftMotorConfig.Slot0.kP = DrivetrainConstants.kP;
+    leftMotorConfig.Slot0.kI = DrivetrainConstants.kI; // No output for integrated error
+    leftMotorConfig.Slot0.kD = DrivetrainConstants.kD; // A velocity of 1 rps results in 0.1 V output
+
+    leftMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    leftMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+
+    leftMotorConfig.Voltage.withPeakForwardVoltage(Volts.of(DrivetrainConstants.PeakVoltage))
+    .withPeakReverseVoltage(Volts.of(-DrivetrainConstants.PeakVoltage));
+
+    m_leftMotor.getConfigurator().apply(leftMotorConfig);
     SendableRegistry.setName(m_leftMotor, "DriveSubsystem", "leftMotor");
 
     // Optional Left Motor
     try {
       m_optionalLeftMotor = new TalonFX(DrivetrainConstants.kOptionalLeftMotorCANID);
-  
-      // Saving config
-      final TalonFXConfigurator leftOptionalMotorConfigurator = m_optionalLeftMotor.getConfigurator();
-      leftOptionalMotorConfigurator.apply(autoConfig); // i hope it wont overwrite above config
+
+      // Setting up Config
+      TalonFXConfiguration optionalLeftMotorConfig = new TalonFXConfiguration();
+      optionalLeftMotorConfig.Slot0.kV = DrivetrainConstants.kV;
+      optionalLeftMotorConfig.Slot0.kS = DrivetrainConstants.kS;
+      optionalLeftMotorConfig.Slot0.kP = DrivetrainConstants.kP;
+      optionalLeftMotorConfig.Slot0.kI = DrivetrainConstants.kI; // No output for integrated error
+      optionalLeftMotorConfig.Slot0.kD = DrivetrainConstants.kD; // A velocity of 1 rps results in 0.1 V output
+
+      optionalLeftMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+      optionalLeftMotorConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+
+      optionalLeftMotorConfig.Voltage.withPeakForwardVoltage(Volts.of(DrivetrainConstants.PeakVoltage))
+      .withPeakReverseVoltage(Volts.of(-DrivetrainConstants.PeakVoltage));
+
+      // Saving
+      m_optionalLeftMotor.getConfigurator().apply(optionalLeftMotorConfig);
 
       // Setting as follower
       m_optionalLeftMotor.setControl(
@@ -196,64 +234,6 @@ public class DriveSubsystem extends SubsystemBase {
 
     // Gyro setup
     m_gyro.zeroYaw();
-  }
-
-  public void teleopInit() {
-    // Right Motor Setup
-    final MotorOutputConfigs rightMotorOutputConfigs = new MotorOutputConfigs();
-    rightMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive; // why is it a enum :sob:
-    rightMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
-
-    final TalonFXConfigurator rightMotorConfigurator = m_rightMotor.getConfigurator();
-    rightMotorConfigurator.apply(rightMotorOutputConfigs);
-
-    // Optional Right Motor
-    try {
-      // Setting up Config
-      final MotorOutputConfigs rightOptionalMotorOutputConfigs = new MotorOutputConfigs();
-      rightOptionalMotorOutputConfigs.Inverted = InvertedValue.Clockwise_Positive;
-      rightOptionalMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
-  
-      // Saving Config
-      final TalonFXConfigurator rightOptionalMotorConfigurator = m_optionalRightMotor.getConfigurator();
-      rightOptionalMotorConfigurator.apply(rightOptionalMotorOutputConfigs);
-
-      // Setting as a follwer
-      m_optionalRightMotor.setControl(
-        new Follower(m_rightMotor.getDeviceID(), false)
-      );
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-    }
-
-    // Left Motor Setup
-    final MotorOutputConfigs leftMotorOutputConfigs = new MotorOutputConfigs();
-    leftMotorOutputConfigs.Inverted = InvertedValue.CounterClockwise_Positive; // why is it a enum :sob:
-    leftMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
-
-    final TalonFXConfigurator leftMotorConfigurator = m_leftMotor.getConfigurator();
-    leftMotorConfigurator.apply(leftMotorOutputConfigs);
-
-    // Optional Left Motor
-    try {
-      // Setting up Config
-      final MotorOutputConfigs leftOptionalMotorOutputConfigs = new MotorOutputConfigs();
-      leftOptionalMotorOutputConfigs.Inverted = InvertedValue.CounterClockwise_Positive;
-      leftOptionalMotorOutputConfigs.NeutralMode = NeutralModeValue.Brake;
-  
-      // Saving Config
-      final TalonFXConfigurator leftOptionalMotorConfigurator = m_optionalLeftMotor.getConfigurator();
-      leftOptionalMotorConfigurator.apply(leftOptionalMotorOutputConfigs);
-
-      // Setting as a follwer
-      m_optionalLeftMotor.setControl(
-        new Follower(m_leftMotor.getDeviceID(), false)
-      );
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-    }
   }
 
   public void initDefaultCommand(XboxController Controller, boolean isArcade)
