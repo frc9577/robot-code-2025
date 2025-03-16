@@ -12,6 +12,7 @@ import frc.robot.commands.ChangeElevatorLevel;
 import frc.robot.commands.CoralIntakeCommand;
 import frc.robot.commands.CoralOutputCommand;
 import frc.robot.commands.CoralSpeedCommand;
+import frc.robot.commands.ElevatorManualSpeed;
 import frc.robot.commands.EmptyCommand;
 import frc.robot.commands.IntakeAlgaeCommand;
 import frc.robot.commands.OutputAlgaeCommand;
@@ -79,13 +80,15 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, OperatorConstants.kAlageIntake);
   private final JoystickButton m_algaeOutputButton =
     new JoystickButton(m_operatorController, OperatorConstants.kAlageOutput);
-  
+
   private final JoystickButton m_coralIntakeButton = 
     new JoystickButton(m_operatorController, OperatorConstants.kCoralIntake);
   private final JoystickButton m_coralOutputButton =
     new JoystickButton(m_operatorController, OperatorConstants.kCoralOuttake);
   private final JoystickButton m_coralStopMotorsButton =
     new JoystickButton(m_operatorController, OperatorConstants.kCoralStop);
+
+  private ElevatorManualSpeed m_manualSpeedCommand;
 
   // Keep track of time for SmartDashboard updates.
   static int m_iTickCount = 0;
@@ -338,9 +341,28 @@ public class RobotContainer {
     
   }
 
-  // This gets called every system tick for testing.
-  public void periodicTest()
+  // This gets called every teleop periodic tick
+  public void teleopPeriodic()
   {
+    if (m_elevatorSubsystem.isPresent()) {
+      // Getting elevator stuff.
+      ElevatorSubsystem elevatorSubsystem = m_elevatorSubsystem.get();
+      if (m_manualSpeedCommand == null) {
+        m_manualSpeedCommand = new ElevatorManualSpeed(elevatorSubsystem);
+      }
 
+      // Looks for the bottom (180) degrees +- 45 (135 and 225)
+      int pov = m_operatorController.getPOV();
+      if (pov >= 135 && pov <= 225) {
+        if (m_manualSpeedCommand.isScheduled() == false) {
+          m_manualSpeedCommand.schedule();
+        }
+      } else {
+        if (m_manualSpeedCommand.isScheduled() == true) {
+          elevatorSubsystem.zeroPosition();
+          m_manualSpeedCommand.cancel();
+        }
+      }
+    }
   }
 }

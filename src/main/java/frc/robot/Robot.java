@@ -61,9 +61,6 @@ public class Robot extends TimedRobot {
 
     // Send subsystem and robot state back to the driver station.
     m_robotContainer.UpdateSmartDashboard();
-
-    // Run function for test periodics
-    m_robotContainer.periodicTest();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -104,7 +101,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    m_robotContainer.teleopPeriodic();
+  }
 
   @Override
   public void testInit() {

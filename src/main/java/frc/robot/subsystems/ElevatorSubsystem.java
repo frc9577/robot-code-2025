@@ -156,6 +156,13 @@ public class ElevatorSubsystem extends SubsystemBase {
       return -elevatorPosition;
     }
   }
+  
+  // Wrapper function for all of the zeroing stuff.
+  public void zeroPosition() {
+    setTargetPosition(0.0);
+    m_motor.setPosition(0);
+    levelIndex = 0;
+  }
 
   @Override
   public void periodic() {
@@ -163,9 +170,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     boolean elevatorDown = isElevatorDown();
 
     if ((elevatorDown == true) && (m_sensorBroken == false)) {
-      setTargetPosition(0.0);
-      m_motor.setPosition(0);
-      levelIndex = 0;
+      zeroPosition();
       m_sensorBroken = true;
     }
 
