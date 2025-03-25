@@ -199,4 +199,9 @@ package frc.robot;
     // SmartDashboard update frequency for elevator subsystem state in 20ms counts.
     public static final int kTicksPerUpdate = 5;
   }
+
+  public static class DrivetrainConstants {
+    public static final int kLeftMotorCANID = 10;
+    public static final int kRightMotorCANID = 20;
+  }
 }
