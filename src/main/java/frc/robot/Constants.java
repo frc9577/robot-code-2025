@@ -89,7 +89,7 @@ package frc.robot;
     public static final int kOptionalRightMotorCANID = 21;
 
     public static final double kTurnDivider = 2;
-    public static final double kSpeedDivider = 1.5;
+    public static final double kSpeedDivider = 4.5;
 
     // Auto PID stuff
     public static final double kV = 0; // Add x V output to overcome static friction
@@ -198,10 +198,5 @@ package frc.robot;
 
     // SmartDashboard update frequency for elevator subsystem state in 20ms counts.
     public static final int kTicksPerUpdate = 5;
-  }
-
-  public static class DrivetrainConstants {
-    public static final int kLeftMotorCANID = 10;
-    public static final int kRightMotorCANID = 20;
   }
 }
