@@ -4,9 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.MjpegServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.RobotConstants;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -16,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-
   private RobotContainer m_robotContainer;
 
   /**
@@ -25,9 +28,20 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    enableLiveWindowInTest(true);
+    //CanBridge.runTCP();
+
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
+    // Start the driver camera streaming.
+    MjpegServer server = CameraServer.addServer("Driver Camera");
+    UsbCamera camera = new UsbCamera("Driver Camera", 0);
+    camera.setResolution(RobotConstants.kDriverCameraResolutionX, RobotConstants.kDriverCameraResolutionY);
+    camera.setFPS(RobotConstants.kDriverCameraFPS);
+    
+    server.setSource(camera);
   }
 
   /**
@@ -44,6 +58,9 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    // Send subsystem and robot state back to the driver station.
+    m_robotContainer.UpdateSmartDashboard();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -77,16 +94,23 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    m_robotContainer.setDriveType();
+    m_robotContainer.teleopInit();
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    m_robotContainer.teleopPeriodic();
+  }
 
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+
+    m_robotContainer.setDriveType();
   }
 
   /** This function is called periodically during test mode. */

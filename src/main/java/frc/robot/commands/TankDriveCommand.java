@@ -1,26 +1,28 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// This is the default command for drive subsystem and handles jotstick control of the speed.
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.ExampleSubsystem;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.DriveSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class ExampleCommand extends Command {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField", "unused"})
-  private final ExampleSubsystem m_subsystem;
+public class TankDriveCommand extends Command {
+  private final DriveSubsystem m_subsystem;
+  private XboxController m_tankController;
 
   /**
-   * Creates a new ExampleCommand.
+   * Creates a new DriveCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ExampleCommand(ExampleSubsystem subsystem) {
+  public TankDriveCommand(DriveSubsystem subsystem, XboxController tankController) 
+  {
     m_subsystem = subsystem;
+    m_tankController = tankController;
+
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+    addRequirements(m_subsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -29,7 +31,10 @@ public class ExampleCommand extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() 
+  {
+    m_subsystem.setTankSpeeds(-m_tankController.getLeftY(), -m_tankController.getRightY());
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -37,7 +42,8 @@ public class ExampleCommand extends Command {
 
   // Returns true when the command should end.
   @Override
-  public boolean isFinished() {
+  public boolean isFinished() 
+  {
     return false;
   }
 }
