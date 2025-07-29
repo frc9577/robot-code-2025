@@ -89,7 +89,7 @@ package frc.robot;
     public static final int kOptionalRightMotorCANID = 21;
 
     public static final double kTurnDivider = 2;
-    public static final double kSpeedDivider = 4.5;
+    public static final double kSpeedDivider = 1.5;
 
     // Auto PID stuff
     public static final double kV = 0; // Add x V output to overcome static friction
@@ -159,7 +159,7 @@ package frc.robot;
     public static final boolean kSensorFalseIsEmpty = true;
 
     // number of ticks between sensor change and motor stop
-    public static final int kEndIntakeMaxCount = 0; // 0 second(s)
+    public static final int kEndIntakeMaxCount = 15; // 0 second(s)
     public static final int kEndOutputMaxCount = 100; // 2 second(s)
 
     public static final double kIntakeSpeed = 1;
