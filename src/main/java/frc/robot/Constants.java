@@ -70,8 +70,10 @@ package frc.robot;
     public static final int kIncreaseElevatorLevel = 4; // Button Y
 
     public static final int kCoralIntake = 6; // Right Bumper
-    public static final int kCoralOuttake = 5; // Left Bumper
+    public static final int kCoralOuttake = 0; // Left Bumper (used to be 5, currently disabled)
     public static final int kCoralStop = 9; // Left Thumbstick Button
+
+    public static final int kShooterShoot = 5; // Left Bumper
 
     public static final int kAlageIntake = 8; // START
     public static final int kAlageOutput = 7; // BACK
@@ -129,6 +131,25 @@ package frc.robot;
   }
 
   public static class CoralConstants {
+    public static final int kIntakeMotorCANID = 40;
+    public static final int kOutputMotorCANID = 41;
+
+    public static final double kMotorIntakeSpeed = 1.0;
+    public static final double kMotorOutputSpeed = -1.0;
+
+    // number of ticks between sensor change and motor stop
+    public static final int kEndIntakeMaxCount = 6; // ~0.125 second(s)
+    public static final int kEndOutputMaxCount = 50; // 1 second(s)
+
+    // Line Break? sensor to detect coral in the middle
+    public static final int kSensorChannel = 0;
+    public static final boolean kSensorFalseIsEmpty = false;
+
+    // SmartDashboard update frequency for coral subsystem state in 20ms counts.
+    public static final int kTicksPerUpdate = 10;
+  }
+
+  public static class ShooterConstants {
     public static final int kIntakeMotorCANID = 40;
     public static final int kOutputMotorCANID = 41;
 
