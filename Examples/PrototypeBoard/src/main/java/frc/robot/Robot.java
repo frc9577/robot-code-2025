@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 /**
  * This is a sample program showing the use of the solenoid classes during operator control. Three
@@ -38,6 +40,12 @@ public class Robot extends TimedRobot {
   static final int kSolenoidReverseButton = 3;
   static final int kCompressorButton = 4;
 
+  static final int kMotor1CANID = 10;
+  static final int kMotor2CANID = 20;
+
+  private final SparkMax m_Motor1 = new SparkMax(kMotor1CANID, MotorType.kBrushless);
+  private final SparkMax m_Motor2 = new SparkMax(kMotor2CANID, MotorType.kBrushless);
+
   /** Called once at the beginning of the robot program. */
   public Robot() {
     // Publish elements to shuffleboard.
@@ -57,11 +65,24 @@ public class Robot extends TimedRobot {
     // Get the digital pressure switch connected to the PCM/PH.
     // The switch is open when the pressure is over ~120 PSI.
     tab.addBoolean("Pressure Switch", m_compressor::getPressureSwitchValue);
+
+    m_Motor1.set(0.0);
+    m_Motor2.set(0.0);
   }
 
   @SuppressWarnings("PMD.UnconditionalIfStatement")
   @Override
   public void teleopPeriodic() {
+
+    /*  
+     * The joystick Y axis control the speed of motor 1 and the X
+     * axis controls motor 2.
+     */
+    double speed = m_stick.getY();
+    m_Motor1.set(speed); 
+
+    speed = m_stick.getX();
+    m_Motor2.set(speed);
 
     /*
      * GetRawButtonPressed will only return true once per press.
