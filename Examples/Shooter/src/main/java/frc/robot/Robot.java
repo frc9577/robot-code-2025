@@ -23,21 +23,21 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 public class Robot extends TimedRobot {
   private static final int kMotorPort    = 10; // CAN ID
   private static final int kJoystickPort = 0;
-  private static final int kEncoderPortA = 0;
-  private static final int kEncoderPortB = 1;
+  //private static final int kEncoderPortA = 0;
+  //private static final int kEncoderPortB = 1;
 
   private final SparkMax m_motor;
   private final XboxController m_joystick;
-  private final Encoder m_encoder;
+  //private final Encoder m_encoder;
 
   /** Called once at the beginning of the robot program. */
   public Robot() {
     m_motor = new SparkMax(kMotorPort, MotorType.kBrushless);
     m_joystick = new XboxController(kJoystickPort);
-    m_encoder = new Encoder(kEncoderPortA, kEncoderPortB);
+    // m_encoder = new Encoder(kEncoderPortA, kEncoderPortB);
     // Use SetDistancePerPulse to set the multiplier for GetDistance
     // This is set up assuming a 6 inch wheel with a 360 CPR encoder.
-    m_encoder.setDistancePerPulse((Math.PI * 6) / 360.0);
+    // m_encoder.setDistancePerPulse((Math.PI * 6) / 360.0);
   }
 
   /*
@@ -46,12 +46,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putNumber("Encoder", m_encoder.getDistance());
+    // SmartDashboard.putNumber("Encoder", m_encoder.getDistance());
   }
 
   /** The teleop periodic function is called every control packet in teleop. */
   @Override
   public void teleopPeriodic() {
-    m_motor.set(m_joystick.getLeftY());
+    double speed = m_joystick.getLeftY();
+    m_motor.set(speed);
   }
 }
