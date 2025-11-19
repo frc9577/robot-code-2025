@@ -69,8 +69,10 @@ package frc.robot;
     public static final int kIntakeElevatorPosition = 2; // Button B
     public static final int kIncreaseElevatorLevel = 4; // Button Y
 
+    // In the future when disabling buttons, please comment out the command bind
+    // under the configureBindings function in the RobotContrainer. - Owen
     public static final int kCoralIntake = 6; // Right Bumper
-    public static final int kCoralOuttake = 0; // Left Bumper (used to be 5, currently disabled)
+    public static final int kCoralOuttake = 5; // Left Bumper
     public static final int kCoralStop = 9; // Left Thumbstick Button
 
     public static final int kShooterShoot = 5; // Left Bumper
