@@ -21,7 +21,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
  * to the Dashboard.
  */
 public class Robot extends TimedRobot {
-  private static final int kMotorPort    = 10; // CAN ID
+  private static final int kMotorPort    = 50; // CAN ID
   private static final int kJoystickPort = 0;
   //private static final int kEncoderPortA = 0;
   //private static final int kEncoderPortB = 1;
